@@ -111,14 +111,70 @@
   .btn-ghost{background:transparent}
   .btn-ghost:hover{transform:translateY(-3px);box-shadow:5px 5px 0 var(--ink)}
   .hero-note{font-size:.9rem;color:var(--muted)}
-  .hero-art{position:relative;display:grid;place-items:center;min-height:340px}
+  .hero-art{position:relative;display:grid;place-items:center;min-height:340px;isolation:isolate}
   .hero-art .blob{
     position:absolute;inset:auto;width:78%;aspect-ratio:1;border-radius:50%;
     background:radial-gradient(circle,var(--tint),transparent 68%);
     animation:pulse 6s ease-in-out infinite;
   }
-  .hero-art img{position:relative;width:86%;max-width:380px;filter:drop-shadow(0 30px 50px rgba(10,10,10,.18));animation:float 7s ease-in-out infinite}
-  @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(-2deg)}}
+  .hero-mascot{
+    position:relative;z-index:1;width:min(100%,440px);aspect-ratio:1/1;
+    display:block;overflow:visible;will-change:transform;transform:translateZ(0);
+  }
+  .hero-mascot [class^="fox-"],.hero-mascot [class*=" fox-"]{
+    transform-box:fill-box;transform-origin:center;will-change:transform,opacity;
+  }
+  .hero-mascot.is-idle{animation:foxBob 2.6s ease-in-out infinite}
+  .hero-mascot .fox-head{animation:foxHeadTilt 13s ease-in-out infinite}
+  .hero-mascot .fox-ears{animation:foxEars 5.8s ease-in-out infinite}
+  .hero-mascot .fox-eyes{animation:foxBlink 6.4s linear infinite}
+  .hero-mascot .fox-body{animation:foxBreath 3.2s ease-in-out infinite}
+  .hero-mascot .fox-tail{transform-origin:28% 68%;animation:foxTail 2.8s ease-in-out infinite}
+  .hero-mascot .fox-tail-tip{transform-origin:18% 60%;animation:foxTailTip 2.8s ease-in-out infinite}
+  .hero-mascot .fox-front-legs,.hero-mascot .fox-back-legs{animation:foxGrounded 2.6s ease-in-out infinite}
+  .hero-mascot .fox-shadow{opacity:.12;transform-origin:center;animation:foxShadow 2.6s ease-in-out infinite}
+  @keyframes foxBob{
+    0%,100%{transform:translate3d(0,2px,0)}
+    50%{transform:translate3d(0,-3px,0)}
+  }
+  @keyframes foxTail{
+    0%,100%{transform:rotate(-5deg)}
+    50%{transform:rotate(5deg)}
+  }
+  @keyframes foxTailTip{
+    0%,100%{transform:rotate(-3deg)}
+    50%{transform:rotate(4deg)}
+  }
+  @keyframes foxEars{
+    0%,100%{transform:translateY(0) rotate(0)}
+    46%{transform:translateY(0) rotate(0)}
+    50%{transform:translateY(-1px) rotate(-2deg)}
+    54%{transform:translateY(0) rotate(1deg)}
+    58%{transform:translateY(0) rotate(0)}
+  }
+  @keyframes foxBlink{
+    0%,8%,48%,56%,100%{transform:scaleY(1)}
+    4%,52%{transform:scaleY(.12)}
+    6%,54%{transform:scaleY(1)}
+  }
+  @keyframes foxBreath{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.018,.988)}
+  }
+  @keyframes foxHeadTilt{
+    0%,100%{transform:rotate(0deg) translate3d(0,0,0)}
+    72%{transform:rotate(0deg) translate3d(0,0,0)}
+    78%{transform:rotate(2.2deg) translate3d(1px,-1px,0)}
+    84%{transform:rotate(0deg) translate3d(0,0,0)}
+  }
+  @keyframes foxShadow{
+    0%,100%{transform:scaleX(1);opacity:.12}
+    50%{transform:scaleX(.96);opacity:.08}
+  }
+  @keyframes foxGrounded{
+    0%,100%{transform:translate3d(0,0,0)}
+    50%{transform:translate3d(0,1px,0)}
+  }
   @keyframes pulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.08);opacity:.65}}
 
   /* ---------- MARQUEE ---------- */
@@ -314,7 +370,70 @@
   </div>
   <div class="hero-art reveal">
     <span class="blob"></span>
-    <img src="images/fox-mark.png" alt="Funky Fox mark" />
+    <svg class="hero-mascot is-idle" viewBox="0 0 420 420" role="img" aria-labelledby="heroFoxTitle heroFoxDesc" data-fox-state="idle" data-fox-ready="true">
+      <title id="heroFoxTitle">Funky Fox mascot</title>
+      <desc id="heroFoxDesc">A seated orange fox mascot with a fluffy oversized tail and a friendly expression.</desc>
+      <ellipse class="fox-shadow" cx="216" cy="336" rx="108" ry="20" fill="#0A0A0A" />
+
+      <g class="fox-tail" data-part="tail">
+        <path fill="#F5600D" d="M138 264c-44 8-73 42-73 78 0 26 19 42 49 42 47 0 85-34 113-79 11-17 15-36 7-49-13-21-54-18-96 8Z"/>
+        <path class="fox-tail-tip" fill="#FFFDF8" d="M95 318c-20 14-30 31-30 46 0 12 9 20 23 20 27 0 53-21 75-50-16-12-38-18-68-16Z"/>
+      </g>
+
+      <g class="fox-back-legs" data-part="back-legs">
+        <rect x="165" y="258" width="58" height="85" rx="26" fill="#0A0A0A"/>
+        <rect x="252" y="258" width="58" height="85" rx="26" fill="#0A0A0A"/>
+        <rect x="164" y="322" width="66" height="28" rx="14" fill="#FFF"/>
+        <rect x="248" y="322" width="70" height="28" rx="14" fill="#FFF"/>
+      </g>
+
+      <g class="fox-body" data-part="body">
+        <path fill="#F5600D" d="M136 162c22-24 53-36 91-36 56 0 98 28 113 80 18 64-13 138-86 138h-24c-92 0-140-51-140-113 0-28 9-51 24-69 6-7 14-8 22 0Z"/>
+        <ellipse cx="234" cy="225" rx="66" ry="82" fill="#FFFDF8"/>
+        <ellipse cx="238" cy="223" rx="40" ry="52" fill="#FFF"/>
+        <path fill="#0A0A0A" d="M309 198c16 14 26 33 29 60 16-54-9-99-61-122 14 15 24 35 32 62Z"/>
+      </g>
+
+      <g class="fox-front-legs" data-part="front-legs">
+        <rect x="197" y="248" width="36" height="98" rx="18" fill="#FFFDF8"/>
+        <rect x="240" y="248" width="36" height="98" rx="18" fill="#FFFDF8"/>
+        <rect x="192" y="321" width="46" height="28" rx="14" fill="#FFF"/>
+        <rect x="236" y="321" width="46" height="28" rx="14" fill="#FFF"/>
+      </g>
+
+      <g class="fox-head" data-part="head">
+        <g class="fox-ears" data-part="ears">
+          <g>
+            <path fill="#0A0A0A" d="M175 94c-18 11-32 30-37 56 27-10 47-28 58-49 6-12-8-16-21-7Z"/>
+            <path fill="#FFFDF8" d="M172 109c-9 8-16 18-19 29 13-6 23-15 30-28-4-3-7-3-11-1Z"/>
+          </g>
+          <g>
+            <path fill="#0A0A0A" d="M292 94c18 11 32 30 37 56-27-10-47-28-58-49-6-12 8-16 21-7Z"/>
+            <path fill="#FFFDF8" d="M295 109c9 8 16 18 19 29-13-6-23-15-30-28 4-3 7-3 11-1Z"/>
+          </g>
+        </g>
+
+        <path fill="#F5600D" d="M231 83c-56 0-102 37-102 88 0 43 35 75 76 83 16 3 36 3 53 0 41-8 76-40 76-83 0-51-46-88-103-88Z"/>
+        <path fill="#FFFDF8" d="M232 120c-41 0-74 26-74 60 0 33 28 56 74 56s74-23 74-56c0-34-33-60-74-60Z"/>
+        <ellipse cx="193" cy="138" rx="16" ry="10" fill="#FFF"/>
+        <ellipse cx="274" cy="138" rx="16" ry="10" fill="#FFF"/>
+
+        <g class="fox-eyes" data-part="eyes">
+          <g>
+            <ellipse cx="194" cy="167" rx="14" ry="17" fill="#0A0A0A"/>
+            <ellipse cx="198" cy="162" rx="4" ry="5" fill="#FFF"/>
+          </g>
+          <g>
+            <ellipse cx="273" cy="167" rx="14" ry="17" fill="#0A0A0A"/>
+            <ellipse cx="277" cy="162" rx="4" ry="5" fill="#FFF"/>
+          </g>
+        </g>
+
+        <ellipse cx="233" cy="192" rx="34" ry="26" fill="#FFF"/>
+        <path fill="#0A0A0A" d="M233 178c-8 0-14 5-14 12 0 9 9 15 14 18 5-3 14-9 14-18 0-7-6-12-14-12Z"/>
+        <path fill="#0A0A0A" d="M216 207c7 12 27 12 34 0 2-3-2-6-5-4-8 6-16 6-24 0-3-2-7 1-5 4Z"/>
+      </g>
+    </svg>
   </div>
 </div></div></header>
 

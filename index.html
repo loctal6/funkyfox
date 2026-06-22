@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Funky Fox — Brand, web & content studio</title>
+<meta name="description" content="Funky Fox is a creative studio building sharp brand identities, fast websites, and content systems for ambitious teams." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A0A0A'/%3E%3Cpath d='M14 40c7-13 17-20 28-22-3 5-4 9-3 14 6-1 11 1 15 6-11 7-25 9-40 2Z' fill='%23F5600D'/%3E%3C/svg%3E" />
+<style>
+  :root{
+    --ink:#0A0A0A;
+    --ink-soft:#1c1c1c;
+    --paper:#F7F4EE;
+    --paper-2:#EFEAE0;
+    --orange:#F5600D;
+    --orange-deep:#d44f06;
+    --tint:#FCE4D6;
+    --line:rgba(10,10,10,.12);
+    --muted:#6b6660;
+    --white:#fff;
+    --maxw:1240px;
+    --r:18px;
+    --r-lg:28px;
+    --shadow:0 24px 60px rgba(10,10,10,.10);
+    --cx:50vw;--cy:30vh;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;line-height:1.6;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  }
+  /* faint dotted grid + cursor glow */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background-image:radial-gradient(rgba(10,10,10,.05) 1px,transparent 1px);
+    background-size:26px 26px;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(220px circle at var(--cx) var(--cy),rgba(245,96,13,.10),transparent 70%);
+    transition:background .2s;
+  }
+  /* fox paw cursor */
+  @media(hover:hover) and (pointer:fine){
+    *{cursor:none!important}
+    .paw-cursor{position:fixed;top:0;left:0;width:30px;height:30px;z-index:9999;pointer-events:none;
+      transform:translate(-50%,-50%);transition:transform .12s ease;will-change:transform}
+    .paw-cursor.click{transform:translate(-50%,-50%) scale(.7)}
+    .paw-print{position:fixed;width:22px;height:22px;z-index:9998;pointer-events:none;
+      transform:translate(-50%,-50%) rotate(var(--rot,0deg));opacity:.55;
+      animation:pawFade 1.1s ease forwards}
+    @keyframes pawFade{to{opacity:0;transform:translate(-50%,-50%) rotate(var(--rot,0deg)) scale(.7)}}
+  }
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:"Space Grotesk",sans-serif;margin:0;letter-spacing:-.02em;line-height:1}
+  button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+  img,video{display:block;max-width:100%}
+  .wrap{width:min(100% - 40px,var(--maxw));margin-inline:auto}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:"Space Grotesk";font-weight:600;font-size:.74rem;
+    text-transform:uppercase;letter-spacing:.18em;color:var(--orange);
+  }
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--orange)}
+  .section{padding:clamp(64px,9vw,128px) 0}
+  .section-title{font-size:clamp(2.2rem,5vw,4rem);font-weight:700;max-width:16ch}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:16px;z-index:60;margin-top:16px}
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:12px 12px 12px 20px;border:2px solid var(--ink);border-radius:999px;
+    background:rgba(247,244,238,.82);backdrop-filter:blur(14px);
+  }
+  .logo{display:inline-flex;align-items:center;gap:11px;font-family:"Space Grotesk";font-weight:700;font-size:1.05rem;letter-spacing:.02em}
+  .logo img{height:30px;width:auto}
+  .logo b{font-weight:700}.logo span{color:var(--orange)}
+  .nav-links{display:flex;gap:4px}
+  .nav-links a{padding:9px 14px;border-radius:999px;font-size:.92rem;color:var(--ink);font-weight:500;transition:.2s}
+  .nav-links a:hover{background:var(--ink);color:var(--paper)}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;
+    background:var(--orange);color:#fff;font-weight:600;font-family:"Space Grotesk";
+    border:2px solid var(--ink);transition:transform .2s,box-shadow .2s;
+  }
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:4px 4px 0 var(--ink)}
+  .nav-burger{display:none}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:clamp(40px,6vw,90px) 0 clamp(50px,7vw,100px)}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:center}
+  .hero-kicker{margin-bottom:24px}
+  .hero h1{font-size:clamp(3rem,8.5vw,7.2rem);font-weight:700;letter-spacing:-.04em}
+  .hero h1 .out{
+    -webkit-text-stroke:2px var(--ink);color:transparent;
+  }
+  .hero h1 .fill{color:var(--orange)}
+  .hero-sub{margin:26px 0 34px;font-size:clamp(1.05rem,1.6vw,1.2rem);color:var(--ink-soft);max-width:44ch}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;
+    font-family:"Space Grotesk";font-weight:600;border:2px solid var(--ink);transition:transform .2s,box-shadow .2s;
+  }
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:5px 5px 0 var(--orange)}
+  .btn-ghost{background:transparent}
+  .btn-ghost:hover{transform:translateY(-3px);box-shadow:5px 5px 0 var(--ink)}
+  .hero-note{font-size:.9rem;color:var(--muted)}
+  .hero-art{position:relative;display:grid;place-items:center;min-height:340px}
+  .hero-art .blob{
+    position:absolute;inset:auto;width:78%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,var(--tint),transparent 68%);
+    animation:pulse 6s ease-in-out infinite;
+  }
+  .hero-art img{position:relative;width:86%;max-width:380px;filter:drop-shadow(0 30px 50px rgba(10,10,10,.18));animation:float 7s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-16px) rotate(-2deg)}}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.08);opacity:.65}}
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{border-block:2px solid var(--ink);background:var(--ink);overflow:hidden;padding:18px 0}
+  .marquee-track{display:flex;width:max-content;animation:scroll-x 30s linear infinite;gap:40px}
+  .marquee-track span{
+    font-family:"Space Grotesk";font-weight:600;font-size:clamp(1.1rem,2.4vw,1.9rem);
+    color:var(--paper);white-space:nowrap;display:inline-flex;align-items:center;gap:40px;letter-spacing:-.01em;
+  }
+  .marquee-track span::after{content:"✺";color:var(--orange)}
+  @keyframes scroll-x{to{transform:translateX(-50%)}}
+
+  /* ---------- INTRO STRIP ---------- */
+  .intro{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end}
+  .intro p.lead{font-family:"Space Grotesk";font-weight:500;font-size:clamp(1.4rem,2.6vw,2.1rem);line-height:1.25;letter-spacing:-.02em}
+  .intro p.lead em{font-style:normal;color:var(--orange)}
+  .intro .pillars{display:grid;gap:18px}
+  .pillar{display:flex;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .pillar b{font-family:"Space Grotesk";font-size:1.05rem;display:block;margin-bottom:3px}
+  .pillar p{margin:0;font-size:.95rem;color:var(--muted)}
+  .pillar .nm{font-family:"Space Grotesk";color:var(--orange);font-weight:700}
+
+  /* ---------- SERVICES ---------- */
+  .svc-head{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap;margin-bottom:46px}
+  .svc-head p{max-width:34ch;color:var(--muted);margin:0}
+  .svc{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .svc-list{display:grid;gap:0;border-top:1px solid var(--line)}
+  .svc-item{border-bottom:1px solid var(--line)}
+  .svc-tab{
+    width:100%;display:flex;align-items:center;gap:18px;padding:22px 6px;text-align:left;transition:.25s;
+  }
+  .svc-num{font-family:"Space Grotesk";font-weight:600;font-size:.85rem;color:var(--orange);width:34px}
+  .svc-name{font-family:"Space Grotesk";font-weight:600;font-size:clamp(1.3rem,2.4vw,1.8rem);flex:1;transition:.25s}
+  .svc-plus{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:1.1rem;transition:.25s;flex-shrink:0}
+  .svc-item.open .svc-name{color:var(--orange)}
+  .svc-item.open .svc-plus{background:var(--orange);border-color:var(--orange);color:#fff;transform:rotate(135deg)}
+  .svc-tab:hover .svc-name{transform:translateX(6px)}
+  .svc-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .svc-body-inner{padding:0 6px 24px;color:var(--muted);max-width:52ch}
+  .svc-body-inner .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .svc-body-inner .tags span{font-family:"Space Grotesk";font-size:.78rem;padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink)}
+  .svc-visual{
+    position:sticky;top:100px;align-self:start;border:2px solid var(--ink);border-radius:var(--r-lg);
+    background:var(--ink);color:var(--paper);padding:38px;min-height:440px;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:space-between;transition:.4s;
+  }
+  .svc-visual::after{
+    content:"";position:absolute;right:-80px;bottom:-80px;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.5;transition:.4s;
+  }
+  .svc-visual .vnum{font-family:"Space Grotesk";font-size:5rem;font-weight:700;color:var(--orange);line-height:1}
+  .svc-visual h3{font-size:clamp(1.6rem,3vw,2.4rem);position:relative;z-index:1}
+  .svc-visual p{position:relative;z-index:1;color:rgba(247,244,238,.78);margin:14px 0 0}
+
+  /* ---------- WORK / PORTFOLIO ---------- */
+  .work-head{margin-bottom:42px;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+  .work-head p{max-width:36ch;color:var(--muted);margin:0}
+  .rail{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+  .rail-track{display:flex;gap:22px;width:max-content;animation:scroll-x 24s linear infinite}
+  .rail:hover .rail-track{animation-play-state:paused}
+  .work-card{
+    position:relative;border:2px solid var(--ink);border-radius:var(--r);overflow:hidden;cursor:pointer;
+    background:var(--paper-2);transition:transform .3s;
+  }
+  .work-card{width:360px;aspect-ratio:9/6.4}
+  .work-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .work-card:hover{transform:translateY(-6px)}
+  .work-card:hover img{transform:scale(1.05)}
+  .work-card figcaption{
+    position:absolute;left:0;bottom:0;right:0;padding:16px;font-family:"Space Grotesk";font-weight:600;
+    color:#fff;background:linear-gradient(transparent,rgba(10,10,10,.85));display:flex;justify-content:space-between;align-items:center;
+  }
+  .work-card figcaption span{font-size:.78rem;font-weight:500;color:var(--orange)}
+
+  /* ---------- PROCESS ---------- */
+  .proc{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:start}
+  .proc-aside{position:sticky;top:100px}
+  .proc-aside h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;margin-top:18px}
+  .proc-aside p{color:var(--muted);margin-top:18px;max-width:34ch}
+  .proc-steps{display:grid;gap:18px}
+  .proc-step{border:2px solid var(--ink);border-radius:var(--r-lg);padding:30px;background:var(--paper);transition:.3s}
+  .proc-step:hover{background:var(--ink);color:var(--paper)}
+  .proc-step:hover p{color:rgba(247,244,238,.75)}
+  .proc-step:hover .ps-num{color:var(--orange)}
+  .ps-num{font-family:"Space Grotesk";font-weight:700;font-size:2.4rem;color:var(--orange);line-height:1}
+  .proc-step h3{font-size:1.4rem;margin:10px 0 8px}
+  .proc-step p{color:var(--muted);margin:0;transition:.3s}
+
+  /* ---------- STATS ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;border:2px solid var(--ink);border-radius:var(--r-lg);overflow:hidden;background:var(--ink)}
+  .stat{padding:40px 28px;color:var(--paper);border-right:1px solid rgba(247,244,238,.14)}
+  .stat:last-child{border-right:0}
+  .stat b{display:block;font-family:"Space Grotesk";font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);color:var(--orange);line-height:1}
+  .stat span{font-size:.92rem;color:rgba(247,244,238,.7);margin-top:10px;display:block}
+
+  /* ---------- FAQ ---------- */
+  .faq{display:grid;grid-template-columns:.7fr 1.3fr;gap:50px;align-items:start}
+  .faq-aside h2{font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-top:16px}
+  .faq-list{border-top:1px solid var(--line)}
+  .faq-q{border-bottom:1px solid var(--line)}
+  .faq-q button{width:100%;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:24px 4px;text-align:left;font-family:"Space Grotesk";font-weight:600;font-size:1.15rem}
+  .faq-q .qmark{color:var(--orange);font-size:1.5rem;transition:.3s;flex-shrink:0}
+  .faq-q.open .qmark{transform:rotate(45deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .faq-a p{padding:0 4px 24px;margin:0;color:var(--muted);max-width:62ch}
+
+  /* ---------- CONTACT ---------- */
+  .contact{border:2px solid var(--ink);border-radius:var(--r-lg);overflow:hidden;background:var(--ink);color:var(--paper);display:grid;grid-template-columns:1fr 1fr}
+  .contact-l{padding:clamp(36px,5vw,64px);position:relative}
+  .contact-l .eyebrow{color:var(--orange)}
+  .contact-l h2{font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:700;margin:18px 0 16px}
+  .contact-l p{color:rgba(247,244,238,.78);max-width:42ch}
+  .contact-l img.fox{width:130px;margin-top:30px;filter:drop-shadow(0 16px 30px rgba(0,0,0,.4))}
+  .contact-r{padding:clamp(36px,5vw,64px);background:var(--paper);color:var(--ink)}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-family:"Space Grotesk";font-weight:600;font-size:.82rem;margin-bottom:7px;text-transform:uppercase;letter-spacing:.08em}
+  .field input,.field textarea{
+    width:100%;padding:13px 16px;border:2px solid var(--ink);border-radius:12px;background:transparent;font:inherit;color:var(--ink);
+  }
+  .field input:focus,.field textarea:focus{outline:0;border-color:var(--orange);box-shadow:3px 3px 0 var(--orange)}
+  .field textarea{min-height:110px;resize:vertical}
+  .contact-r .btn-primary{width:100%;justify-content:center;background:var(--orange);border-color:var(--ink)}
+  .contact-r .btn-primary:hover{box-shadow:5px 5px 0 var(--ink)}
+
+  /* ---------- FOOTER ---------- */
+  footer.ft{padding:60px 0 40px}
+  .ft-top{display:flex;justify-content:space-between;align-items:end;gap:30px;flex-wrap:wrap;padding-bottom:30px;border-bottom:1px solid var(--line)}
+  .ft-big{font-family:"Space Grotesk";font-weight:700;font-size:clamp(2.4rem,7vw,5rem);letter-spacing:-.03em;line-height:.95}
+  .ft-big span{color:var(--orange)}
+  .ft-links{display:flex;gap:18px;flex-wrap:wrap}
+  .ft-links a{font-family:"Space Grotesk";font-weight:500;padding:8px 0;border-bottom:2px solid transparent;transition:.2s}
+  .ft-links a:hover{border-color:var(--orange);color:var(--orange)}
+  .ft-bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:24px;font-size:.88rem;color:var(--muted)}
+
+  /* ---------- LIGHTBOX ---------- */
+  .lb{position:fixed;inset:0;z-index:200;background:rgba(10,10,10,.9);display:none;place-items:center;padding:30px;cursor:zoom-out}
+  .lb.on{display:grid}
+  .lb img{max-width:90vw;max-height:85vh;border:3px solid var(--paper);border-radius:14px}
+  .lb-close{position:absolute;top:24px;right:30px;color:#fff;font-size:2rem;font-family:"Space Grotesk"}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:900px){
+    .hero-grid,.intro,.svc,.proc,.faq,.contact{grid-template-columns:1fr}
+    .hero-art{order:-1;min-height:240px}
+    .svc-visual{position:static;min-height:auto}
+    .proc-aside,.svc-visual{position:static}
+    .stats{grid-template-columns:1fr 1fr}
+    .stat:nth-child(2){border-right:0}.stat{border-bottom:1px solid rgba(247,244,238,.14)}
+    .nav-links{display:none}
+  }
+  @media(max-width:560px){
+    .stats{grid-template-columns:1fr}.stat{border-right:0}
+    .work-card{width:260px}
+    .ft-top{flex-direction:column;align-items:start}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav"><div class="wrap"><div class="nav-inner">
+  <a class="logo" href="#top"><img src="images/fox-mark.png" alt=""><b>FUNKY</b>&nbsp;<span>FOX</span></a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#work">Work</a>
+    <a href="#process">Process</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a class="nav-cta" href="#contact">Start a project →</a>
+</div></div></nav>
+
+<main id="top">
+
+<!-- HERO -->
+<header class="hero"><div class="wrap"><div class="hero-grid">
+  <div class="hero-copy reveal">
+    <span class="eyebrow hero-kicker">Brand · Web · Content studio</span>
+    <h1>Brands with <span class="fill">bite</span>,<br><span class="out">built to</span> be<br>impossible<br>to ignore.</h1>
+    <p class="hero-sub">We're a small studio that makes sharp identities, fast websites, and content that actually moves — no fluff, no filler, no waiting around.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#work">See the work →</a>
+      <a class="btn btn-ghost" href="#contact">Let's talk</a>
+      <span class="hero-note">Strategy first. Noise never.</span>
+    </div>
+  </div>
+  <div class="hero-art reveal">
+    <span class="blob"></span>
+    <img src="images/fox-mark.png" alt="Funky Fox mark" />
+  </div>
+</div></div></header>
+
+<!-- MARQUEE -->
+<div class="marquee"><div class="marquee-track">
+  <span>Brand identity</span><span>Websites that convert</span><span>Social that lands</span><span>Content systems</span><span>Launch campaigns</span>
+  <span>Brand identity</span><span>Websites that convert</span><span>Social that lands</span><span>Content systems</span><span>Launch campaigns</span>
+</div></div>
+
+<!-- INTRO -->
+<section class="section"><div class="wrap intro reveal">
+  <p class="lead">Most early brands don't have a content problem. They have a <em>clarity</em> problem — five vendors, five voices, zero direction.</p>
+  <div class="pillars">
+    <div class="pillar"><div><b><span class="nm">01</span> &nbsp;One studio, one voice</b><p>Brand, site, and content built together so everything points the same way.</p></div></div>
+    <div class="pillar"><div><b><span class="nm">02</span> &nbsp;Built to look bigger</b><p>Sharp, considered work that makes a new brand feel established from day one.</p></div></div>
+    <div class="pillar"><div><b><span class="nm">03</span> &nbsp;Made to move fast</b><p>Tight scopes, clear timelines, and systems your team can actually run.</p></div></div>
+  </div>
+</div></section>
+
+<!-- SERVICES -->
+<section class="section" id="services" style="background:var(--paper-2)"><div class="wrap">
+  <div class="svc-head reveal">
+    <div><span class="eyebrow">What we do</span><h2 class="section-title">Everything your brand needs to stop looking new.</h2></div>
+    <p>Scroll through — each service opens as you reach it. Every one is built to connect with the others.</p>
+  </div>
+  <div class="svc">
+    <div class="svc-list reveal">
+      <div class="svc-item open" data-vnum="01" data-vtitle="Brand Creation" data-vcopy="Logos, ad designs, banners, and mood boards — a full visual identity that feels intentionally yours.">
+        <button class="svc-tab"><span class="svc-num">01</span><span class="svc-name">Brand Creation</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">The complete visual base — logo, ad creatives, banners, and mood boards that lock your look before anything else is built.
+          <div class="tags"><span>Logo</span><span>Ad designs</span><span>Banners</span><span>Mood boards</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="02" data-vtitle="Social Media Management" data-vcopy="Instagram, YouTube, and LinkedIn — managed end to end with a rhythm built for growth.">
+        <button class="svc-tab"><span class="svc-num">02</span><span class="svc-name">Social Media Management</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">Full-channel management across Instagram, YouTube, and LinkedIn — strategy, content, and a posting rhythm that compounds.
+          <div class="tags"><span>Instagram</span><span>YouTube</span><span>LinkedIn</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="03" data-vtitle="Performance Marketing" data-vcopy="Paid campaigns built to find the right people and turn spend into measurable growth.">
+        <button class="svc-tab"><span class="svc-num">03</span><span class="svc-name">Performance Marketing</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">Paid campaigns engineered for results — targeting, creative, and optimisation that turn budget into pipeline.
+          <div class="tags"><span>Meta ads</span><span>Targeting</span><span>Optimisation</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="04" data-vtitle="App Design" data-vcopy="Product and app interfaces designed to feel clean, intuitive, and on-brand.">
+        <button class="svc-tab"><span class="svc-num">04</span><span class="svc-name">App Design</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">Interfaces and product design that are clean, intuitive, and unmistakably yours — from first wireframe to polished screens.
+          <div class="tags"><span>UI / UX</span><span>Wireframes</span><span>Prototypes</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="05" data-vtitle="Website Making" data-vcopy="Fast, expressive websites that explain your value and move people to act.">
+        <button class="svc-tab"><span class="svc-num">05</span><span class="svc-name">Website Making</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">Custom-feeling websites built for clarity and speed — landing pages, company sites, and funnels that convert.
+          <div class="tags"><span>Landing pages</span><span>Company sites</span><span>Funnels</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="06" data-vtitle="Videography & Editing" data-vcopy="Shooting and editing in-house — reels, brand films, and content that actually moves.">
+        <button class="svc-tab"><span class="svc-num">06</span><span class="svc-name">Videography & Editing</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">Shot and cut in-house — reels, brand films, and short-form content built to stop the scroll.
+          <div class="tags"><span>Reels</span><span>Brand films</span><span>Editing</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="07" data-vtitle="Event Coverage" data-vcopy="On-ground capture that turns a single event into weeks of content.">
+        <button class="svc-tab"><span class="svc-num">07</span><span class="svc-name">Event Coverage</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">On-ground photo and video coverage that turns one event into a library of content you can post for weeks.
+          <div class="tags"><span>Photo</span><span>Video</span><span>Recaps</span></div></div></div>
+      </div>
+      <div class="svc-item" data-vnum="08" data-vtitle="UGC Content" data-vcopy="Authentic creator-style content that feels native and earns trust.">
+        <button class="svc-tab"><span class="svc-num">08</span><span class="svc-name">UGC Content</span><span class="svc-plus">+</span></button>
+        <div class="svc-body"><div class="svc-body-inner">Creator-style content that feels native to the feed — authentic, relatable, and built to earn trust fast.
+          <div class="tags"><span>Creator-style</span><span>Native feel</span><span>Conversion</span></div></div></div>
+      </div>
+    </div>
+    <aside class="svc-visual reveal">
+      <div class="vnum" id="vnum">01</div>
+      <div><h3 id="vtitle">Brand Creation</h3><p id="vcopy">Logos, ad designs, banners, and mood boards — a full visual identity that feels intentionally yours.</p></div>
+    </aside>
+  </div>
+</div></section>
+
+<!-- WORK -->
+<section class="section" id="work"><div class="wrap work-head reveal">
+  <div><span class="eyebrow">Selected work</span><h2 class="section-title">Look what we made.</h2></div>
+  <p>Websites we've built and pages we run. Hover to pause, click any to enlarge.</p>
+</div>
+<div class="rail"><div class="rail-track" id="rail1"></div></div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process" style="background:var(--paper-2)"><div class="wrap proc">
+  <div class="proc-aside reveal"><span class="eyebrow">How we work</span><h2>From blank page to launch machine.</h2><p>No chaos, no fifty-tab handoffs. A tight sequence that compounds into momentum.</p></div>
+  <div class="proc-steps reveal">
+    <div class="proc-step"><div class="ps-num">01</div><h3>Kickoff & clarity</h3><p>We learn your goals, audience, and tone, then map the creative direction before any heavy lifting starts.</p></div>
+    <div class="proc-step"><div class="ps-num">02</div><h3>Shape the brand</h3><p>Positioning, voice, and visual system locked — the base everything else is built on.</p></div>
+    <div class="proc-step"><div class="ps-num">03</div><h3>Build the system</h3><p>Website, content formats, and automations come together as one connected engine.</p></div>
+    <div class="proc-step"><div class="ps-num">04</div><h3>Launch & tune</h3><p>We ship, watch what earns traction, and refine the touchpoints that matter most.</p></div>
+  </div>
+</div></section>
+
+<!-- STATS -->
+<section class="section"><div class="wrap reveal">
+  <div class="stats">
+    <div class="stat"><b data-count="800" data-suffix="+">0</b><span>Campaigns Delivered</span></div>
+    <div class="stat"><b data-count="90" data-suffix="+">0</b><span>Websites Delivered</span></div>
+    <div class="stat"><b data-count="12" data-suffix="+">0</b><span>Apps Delivered</span></div>
+    <div class="stat"><b data-count="5" data-suffix="+">0</b><span>Years of Expertise</span></div>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section class="section" id="faq" style="background:var(--paper-2)"><div class="wrap faq">
+  <div class="faq-aside reveal"><span class="eyebrow">Good to know</span><h2>Small questions, real answers.</h2></div>
+  <div class="faq-list reveal">
+    <div class="faq-q"><button>What do you actually do?<span class="qmark">+</span></button><div class="faq-a"><p>Brand identity, websites, content and social, plus the automation that ties it together. If it needs a creative system, that's us.</p></div></div>
+    <div class="faq-q"><button>How long does a project take?<span class="qmark">+</span></button><div class="faq-a"><p>Depends on scope. A landing page can be a week or two; a full brand-and-site build runs a few weeks. You get a clear timeline upfront.</p></div></div>
+    <div class="faq-q"><button>Can you work with my existing brand?<span class="qmark">+</span></button><div class="faq-a"><p>Yes — we can refresh and extend what's working instead of starting from zero.</p></div></div>
+    <div class="faq-q"><button>Do you offer revisions?<span class="qmark">+</span></button><div class="faq-a"><p>Every project includes revision rounds so the final work feels right, not just done.</p></div></div>
+  </div>
+</div></section>
+
+<!-- CONTACT -->
+<section class="section" id="contact"><div class="wrap reveal">
+  <div class="contact">
+    <div class="contact-l">
+      <span class="eyebrow">Let's build</span>
+      <h2>Bring the brief, the wild idea, or the messy brand folder.</h2>
+      <p>Whether you're starting from scratch or relaunching, this is a strong place to begin. We'll turn it into something people recognize.</p>
+      <img class="fox" src="images/fox-mark.png" alt="" />
+    </div>
+    <div class="contact-r">
+      <div class="field"><label for="cn">Name</label><input id="cn" type="text" autocomplete="name" /></div>
+      <div class="field"><label for="ce">Email</label><input id="ce" type="email" autocomplete="email" /></div>
+      <div class="field"><label for="cm">What are you building?</label><textarea id="cm"></textarea></div>
+      <button class="btn btn-primary" id="sendBtn">Send it over →</button>
+    </div>
+  </div>
+</div></section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="ft"><div class="wrap">
+  <div class="ft-top">
+    <div class="ft-big">FUNKY <span>FOX</span></div>
+    <div class="ft-links">
+      <a href="#services">Services</a><a href="#work">Work</a><a href="#process">Process</a><a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span>© 2026 Funky Fox Studio. Built in-house.</span>
+    <span>Brand · Web · Content · Growth</span>
+  </div>
+</div></footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb"><span class="lb-close">✕</span><img id="lbImg" src="" alt="" /></div>
+
+<script>
+  const root=document.documentElement;
+  // cursor glow
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    addEventListener('pointermove',e=>{root.style.setProperty('--cx',e.clientX+'px');root.style.setProperty('--cy',e.clientY+'px');});
+  }
+
+  // SERVICES — open on scroll (each activates as it centers in view)
+  const items=[...document.querySelectorAll('.svc-item')];
+  const vnum=document.getElementById('vnum'),vtitle=document.getElementById('vtitle'),vcopy=document.getElementById('vcopy');
+  function openItem(it){
+    items.forEach(i=>{i.classList.remove('open');i.querySelector('.svc-body').style.maxHeight=null;});
+    it.classList.add('open');
+    it.querySelector('.svc-body').style.maxHeight=it.querySelector('.svc-body-inner').scrollHeight+'px';
+    vnum.textContent=it.dataset.vnum;vtitle.textContent=it.dataset.vtitle;vcopy.textContent=it.dataset.vcopy;
+  }
+  openItem(items[0]);
+  // activate the item nearest the viewport center on scroll
+  const svcObserver=new IntersectionObserver(es=>{
+    es.forEach(en=>{ if(en.isIntersecting) openItem(en.target); });
+  },{rootMargin:'-45% 0px -45% 0px',threshold:0});
+  items.forEach(it=>svcObserver.observe(it));
+  // still allow click as a fallback
+  items.forEach(it=>it.querySelector('.svc-tab').addEventListener('click',()=>openItem(it)));
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(q=>{
+    q.querySelector('button').addEventListener('click',()=>{
+      const a=q.querySelector('.faq-a'),open=q.classList.contains('open');
+      document.querySelectorAll('.faq-q').forEach(o=>{o.classList.remove('open');o.querySelector('.faq-a').style.maxHeight=null;});
+      if(!open){q.classList.add('open');a.style.maxHeight=a.scrollHeight+'px';}
+    });
+  });
+
+  // WORK rail — single mixed row, duplicated for seamless loop
+  const work=[
+    {img:'work/work-1.png',name:'Vyntra Media',tag:'Website'},
+    {img:'work/work-4.png',name:'Senpai',tag:'Social'},
+    {img:'work/work-2.png',name:'FWD Home Interiors',tag:'Website'},
+    {img:'work/work-5.png',name:'Urbnr Blr',tag:'Social'},
+    {img:'work/work-7.png',name:'Gleo.ai',tag:'App / Product'},
+    {img:'work/work-3.png',name:'Seeds Consultancy',tag:'Website'},
+    {img:'work/work-6.png',name:'Loop Media',tag:'Social'},
+  ];
+  function card(o){return `<figure class="work-card" data-full="${o.img}"><img src="${o.img}" alt="${o.name}" loading="lazy"><figcaption>${o.name}<span>${o.tag}</span></figcaption></figure>`;}
+  document.getElementById('rail1').innerHTML=(work.map(card).join('')).repeat(2);
+
+  // LIGHTBOX
+  const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg');
+  document.addEventListener('click',e=>{
+    const c=e.target.closest('.work-card');
+    if(c){lbImg.src=c.dataset.full;lb.classList.add('on');}
+    if(e.target===lb||e.target.classList.contains('lb-close'))lb.classList.remove('on');
+  });
+  addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on');});
+
+  // contact (no backend yet)
+  document.getElementById('sendBtn').addEventListener('click',()=>{
+    const n=document.getElementById('cn').value.trim();
+    document.getElementById('sendBtn').textContent = n? `Thanks ${n.split(' ')[0]} — we'll be in touch ✓` : 'Add your details first →';
+  });
+
+  // FOX PAW cursor + footprints
+  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(fine){
+    const PAW = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g fill="#F5600D"><ellipse cx="32" cy="40" rx="13" ry="11"/><ellipse cx="14" cy="26" rx="5" ry="7"/><ellipse cx="26" cy="18" rx="5" ry="7.5"/><ellipse cx="38" cy="18" rx="5" ry="7.5"/><ellipse cx="50" cy="26" rx="5" ry="7"/></g></svg>');
+    const cur=document.createElement('img');cur.src=PAW;cur.className='paw-cursor';cur.alt='';document.body.appendChild(cur);
+    let lastX=0,lastY=0,dist=0,side=1;
+    addEventListener('pointermove',e=>{
+      cur.style.transform=`translate(${e.clientX}px,${e.clientY}px) translate(-50%,-50%)`;
+      const dx=e.clientX-lastX,dy=e.clientY-lastY;dist+=Math.hypot(dx,dy);
+      if(dist>55){ // leave a print every ~55px travelled
+        dist=0;side*=-1;
+        const ang=Math.atan2(dy,dx)*180/Math.PI+90;
+        const perp=8*side; // offset alternating left/right for a walking trail
+        const ox=Math.cos(ang*Math.PI/180)*perp, oy=Math.sin(ang*Math.PI/180)*perp;
+        const p=document.createElement('img');p.src=PAW;p.className='paw-print';
+        p.style.left=(e.clientX-ox)+'px';p.style.top=(e.clientY-oy)+'px';
+        p.style.setProperty('--rot',ang+'deg');
+        document.body.appendChild(p);setTimeout(()=>p.remove(),1100);
+      }
+      lastX=e.clientX;lastY=e.clientY;
+    });
+    addEventListener('pointerdown',()=>cur.classList.add('click'));
+    addEventListener('pointerup',()=>cur.classList.remove('click'));
+  }
+
+  // REVEAL on scroll
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // COUNT-UP
+  const co=new IntersectionObserver(es=>es.forEach(en=>{
+    if(!en.isIntersecting)return;
+    const b=en.target,goal=+b.dataset.count,suf=b.dataset.suffix||'',t0=performance.now();
+    (function tick(t){const p=Math.min((t-t0)/1100,1),e=1-Math.pow(1-p,3);b.textContent=Math.round(goal*e)+suf;if(p<1)requestAnimationFrame(tick);})(t0);
+    co.unobserve(b);
+  }),{threshold:.6});
+  document.querySelectorAll('.stat b').forEach(b=>co.observe(b));
+</script>
+</body>
+</html>

@@ -187,23 +187,249 @@
   /* ---------- WORK / PORTFOLIO ---------- */
   .work-head{margin-bottom:42px;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
   .work-head p{max-width:36ch;color:var(--muted);margin:0}
-  .rail{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-  .rail-track{display:flex;gap:22px;width:max-content;animation:scroll-x 24s linear infinite}
-  .rail:hover .rail-track{animation-play-state:paused}
-  .work-card{
-    position:relative;border:2px solid var(--ink);border-radius:var(--r);overflow:hidden;cursor:pointer;
-    background:var(--paper-2);transition:transform .3s;
-  }
-  .work-card{width:360px;aspect-ratio:9/6.4}
-  .work-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-  .work-card:hover{transform:translateY(-6px)}
-  .work-card:hover img{transform:scale(1.05)}
-  .work-card figcaption{
-    position:absolute;left:0;bottom:0;right:0;padding:16px;font-family:"Space Grotesk";font-weight:600;
-    color:#fff;background:linear-gradient(transparent,rgba(10,10,10,.85));display:flex;justify-content:space-between;align-items:center;
-  }
-  .work-card figcaption span{font-size:.78rem;font-weight:500;color:var(--orange)}
+  .work-tabs{
 
+display:flex;
+gap:12px;
+margin:50px 0;
+
+}
+
+.work-tab{
+
+padding:14px 26px;
+
+border:2px solid var(--ink);
+
+background:white;
+
+border-radius:999px;
+
+font-family:"Space Grotesk";
+
+font-weight:600;
+
+transition:.3s;
+
+cursor:pointer;
+
+}
+
+.work-tab.active{
+
+background:var(--orange);
+
+color:white;
+
+}
+
+.work-panel{
+
+display:none;
+
+}
+
+.work-panel.active{
+
+display:block;
+
+animation:fade .45s;
+
+}
+
+.work-grid{
+    display:flex;
+    gap:22px;
+
+    overflow-x:auto;
+    overflow-y:visible;
+
+    padding:18px 4px 24px;
+
+    scroll-behavior:smooth;
+
+    -webkit-overflow-scrolling:touch;
+
+    align-items:flex-start;
+}
+
+.work-grid::-webkit-scrollbar{
+
+display:none;
+
+}
+
+.website{
+
+min-width:700px;
+
+}
+
+.social{
+
+min-width:260px;
+
+}
+
+.browser{
+
+    border:2px solid var(--ink);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:#fff;
+
+    will-change:transform;
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease;
+
+}
+.browser-top{
+
+height:42px;
+
+background:#eee;
+
+display:flex;
+
+align-items:center;
+
+padding:0 18px;
+
+gap:8px;
+
+}
+
+.browser-top span{
+
+width:11px;
+
+height:11px;
+
+border-radius:50%;
+
+background:#bbb;
+
+}
+
+.browser video{
+
+width:100%;
+
+aspect-ratio:16/9;
+
+object-fit:cover;
+
+display:block;
+
+}
+
+.phone{
+
+    border:2px solid var(--ink);
+
+    border-radius:32px;
+
+    overflow:hidden;
+
+    background:black;
+
+    padding:10px;
+
+    will-change:transform;
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease;
+
+}
+
+.phone video{
+
+width:100%;
+
+aspect-ratio:9/16;
+
+object-fit:cover;
+
+display:block;
+
+border-radius:20px;
+
+}
+
+.portfolio-card{
+
+    color:inherit;
+    text-decoration:none;
+
+    flex-shrink:0;
+
+    display:block;
+
+    padding-top:8px;
+}
+
+.browser,
+.phone{
+
+    transition:
+        transform .35s ease,
+        filter .35s ease;
+
+}
+
+.portfolio-card:hover .browser,
+.portfolio-card:hover .phone{
+
+    transform:translateY(-8px);
+
+    border-color:var(--orange);
+
+}
+.portfolio-info{
+
+margin-top:16px;
+
+}
+
+.portfolio-info h3{
+
+margin:0;
+
+font-size:1.2rem;
+
+}
+
+.portfolio-info span{
+
+color:var(--muted);
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
   /* ---------- PROCESS ---------- */
   .proc{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:start}
   .proc-aside{position:sticky;top:100px}
@@ -264,11 +490,6 @@
   .ft-links a:hover{border-color:var(--orange);color:var(--orange)}
   .ft-bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:24px;font-size:.88rem;color:var(--muted)}
 
-  /* ---------- LIGHTBOX ---------- */
-  .lb{position:fixed;inset:0;z-index:200;background:rgba(10,10,10,.9);display:none;place-items:center;padding:30px;cursor:zoom-out}
-  .lb.on{display:grid}
-  .lb img{max-width:90vw;max-height:85vh;border:3px solid var(--paper);border-radius:14px}
-  .lb-close{position:absolute;top:24px;right:30px;color:#fff;font-size:2rem;font-family:"Space Grotesk"}
 
   /* ---------- REVEAL ---------- */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
@@ -404,25 +625,200 @@
   </div>
 </div></section>
 
-<!-- WORK -->
-<section class="section" id="work"><div class="wrap work-head reveal">
-  <div><span class="eyebrow">Selected work</span><h2 class="section-title">Look what we made.</h2></div>
-  <p>Websites we've built and pages we run. Hover to pause, click any to enlarge.</p>
+<section class="section" id="work">
+
+<div class="wrap work-head reveal">
+    <div>
+        <span class="eyebrow">Selected Work</span>
+        <h2 class="section-title">Proof beats promises.</h2>
+    </div>
+
+    <p>
+        Websites that convert. Socials that get noticed.
+        Click any project to experience it live.
+    </p>
 </div>
-<div class="rail"><div class="rail-track" id="rail1"></div></div>
+
+<div class="reveal">
+
+    <div class="wrap">
+
+        <div class="work-tabs">
+
+            <button class="work-tab active" data-tab="websites">
+                Websites
+            </button>
+
+            <button class="work-tab" data-tab="socials">
+                Socials
+            </button>
+
+<button class="work-tab" data-tab="apps">
+        Apps
+    </button>
+
+
+        </div>
+
+        <div class="work-panel active" id="websites">
+
+            <div class="work-grid website-grid">
+                <a class="portfolio-card website"
+                   href="https://yourwebsite.com"
+                   target="_blank">
+                    <div class="browser">
+                        <div class="browser-top">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <video autoplay muted loop playsinline>
+                            <source src="videos/vyntra.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Vyntra Media</h3>
+                        <span>Corporate Website</span>
+                    </div>
+                </a>
+                <a class="portfolio-card website"
+   href="https://seedsconsultancy.com"
+   target="_blank">
+
+    <div class="browser">
+
+        <div class="browser-top">
+            <span></span><span></span><span></span>
+        </div>
+
+        <video autoplay muted loop playsinline>
+            <source src="videos/seeds.mp4" type="video/mp4">
+        </video>
+
+    </div>
+
+    <div class="portfolio-info">
+        <h3>Seeds Consultancy</h3>
+        <span>Corporate Website</span>
+    </div>
+
+</a>
+            </div>
+        </div>
+
+        <div class="work-panel" id="socials">
+            <div class="work-grid social-grid">
+                <a class="portfolio-card social"
+                   href="https://instagram.com/yourpage"
+                   target="_blank">
+                    <div class="phone">
+                        <video autoplay muted loop playsinline>
+                            <source src="videos/senpai.mp4">
+                        </video>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>Senpai</h3>
+                        <span>Instagram</span>
+                    </div>
+                </a>
+                <a class="portfolio-card social"
+   href="https://instagram.com/senpai"
+   target="_blank">
+
+    <div class="phone">
+        <video autoplay muted loop playsinline>
+            <source src="videos/senpai.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="portfolio-info">
+        <h3>Senpai</h3>
+        <span>Instagram</span>
+    </div>
+
+</a>
+
+
+<a class="portfolio-card social"
+   href="https://instagram.com/fwdhomeinteriors"
+   target="_blank">
+
+    <div class="phone">
+        <video autoplay muted loop playsinline>
+            <source src="videos/fwd.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="portfolio-info">
+        <h3>FWD Home Interiors</h3>
+        <span>Instagram</span>
+    </div>
+
+</a>
+
+
+<a class="portfolio-card social"
+   href="https://instagram.com/urbnr.blr"
+   target="_blank">
+
+    <div class="phone">
+        <video autoplay muted loop playsinline>
+            <source src="videos/urbnr.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="portfolio-info">
+        <h3>urbnr.blr</h3>
+        <span>Instagram</span>
+    </div>
+
+</a>
+
+
+<a class="portfolio-card social"
+   href="https://instagram.com/looptalent"
+   target="_blank">
+
+    <div class="phone">
+        <video autoplay muted loop playsinline>
+            <source src="videos/loop.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="portfolio-info">
+        <h3>Loop Talent</h3>
+        <span>Instagram</span>
+    </div>
+
+</a>
+            </div>
+        </div>
+
+<div class="work-panel" id="apps">
+
+    <div class="work-grid social-grid">
+
+        <a class="portfolio-card social"
+           href="https://yourapp.com"
+           target="_blank">
+            <div class="phone">
+                <video autoplay muted loop playsinline>
+                    <source src="videos/app-demo.mp4">
+                </video>
+            </div>
+            <div class="portfolio-info">
+                <h3>Gleo.ai</h3>
+                <span>Mobile App</span>
+            </div>
+
+        </a>
+
+    </div>
+
+</div>
+
+    </div>
+
+</div>
 </section>
-
-<!-- PROCESS -->
-<section class="section" id="process" style="background:var(--paper-2)"><div class="wrap proc">
-  <div class="proc-aside reveal"><span class="eyebrow">How we work</span><h2>From blank page to launch machine.</h2><p>No chaos, no fifty-tab handoffs. A tight sequence that compounds into momentum.</p></div>
-  <div class="proc-steps reveal">
-    <div class="proc-step"><div class="ps-num">01</div><h3>Kickoff & clarity</h3><p>We learn your goals, audience, and tone, then map the creative direction before any heavy lifting starts.</p></div>
-    <div class="proc-step"><div class="ps-num">02</div><h3>Shape the brand</h3><p>Positioning, voice, and visual system locked — the base everything else is built on.</p></div>
-    <div class="proc-step"><div class="ps-num">03</div><h3>Build the system</h3><p>Website, content formats, and automations come together as one connected engine.</p></div>
-    <div class="proc-step"><div class="ps-num">04</div><h3>Launch & tune</h3><p>We ship, watch what earns traction, and refine the touchpoints that matter most.</p></div>
-  </div>
-</div></section>
-
 <!-- STATS -->
 <section class="section"><div class="wrap reveal">
   <div class="stats">
@@ -478,8 +874,7 @@
   </div>
 </div></footer>
 
-<!-- LIGHTBOX -->
-<div class="lb" id="lb"><span class="lb-close">✕</span><img id="lbImg" src="" alt="" /></div>
+
 
 <script>
   const root=document.documentElement;
@@ -515,28 +910,27 @@
     });
   });
 
-  // WORK rail — single mixed row, duplicated for seamless loop
-  const work=[
-    {img:'work/work-1.png',name:'Vyntra Media',tag:'Website'},
-    {img:'work/work-4.png',name:'Senpai',tag:'Social'},
-    {img:'work/work-2.png',name:'FWD Home Interiors',tag:'Website'},
-    {img:'work/work-5.png',name:'Urbnr Blr',tag:'Social'},
-    {img:'work/work-7.png',name:'Gleo.ai',tag:'App / Product'},
-    {img:'work/work-3.png',name:'Seeds Consultancy',tag:'Website'},
-    {img:'work/work-6.png',name:'Loop Media',tag:'Social'},
-  ];
-  function card(o){return `<figure class="work-card" data-full="${o.img}"><img src="${o.img}" alt="${o.name}" loading="lazy"><figcaption>${o.name}<span>${o.tag}</span></figcaption></figure>`;}
-  document.getElementById('rail1').innerHTML=(work.map(card).join('')).repeat(2);
+const tabs=document.querySelectorAll(".work-tab");
 
-  // LIGHTBOX
-  const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg');
-  document.addEventListener('click',e=>{
-    const c=e.target.closest('.work-card');
-    if(c){lbImg.src=c.dataset.full;lb.classList.add('on');}
-    if(e.target===lb||e.target.classList.contains('lb-close'))lb.classList.remove('on');
-  });
-  addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on');});
+tabs.forEach(tab=>{
 
+tab.onclick=()=>{
+
+tabs.forEach(t=>t.classList.remove("active"));
+
+document.querySelectorAll(".work-panel")
+.forEach(p=>p.classList.remove("active"));
+
+tab.classList.add("active");
+
+document
+.getElementById(tab.dataset.tab)
+.classList.add("active");
+
+};
+
+});
+  
   // contact (no backend yet)
   document.getElementById('sendBtn').addEventListener('click',()=>{
     const n=document.getElementById('cn').value.trim();

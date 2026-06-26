@@ -470,6 +470,27 @@ transform:none;
   .contact-l p{color:rgba(247,244,238,.78);max-width:42ch}
   .contact-l img.fox{width:130px;margin-top:30px;filter:drop-shadow(0 16px 30px rgba(0,0,0,.4))}
   .contact-r{padding:clamp(36px,5vw,64px);background:var(--paper);color:var(--ink)}
+  .field select{
+    width:100%;
+    padding:13px 16px;
+    border:2px solid var(--ink);
+    border-radius:12px;
+    background:transparent;
+    font:inherit;
+    color:var(--ink);
+    appearance:none;
+}
+
+.field select:focus{
+    outline:0;
+    border-color:var(--orange);
+    box-shadow:3px 3px 0 var(--orange);
+}
+
+button:disabled{
+    opacity:.9;
+    cursor:not-allowed;
+}
   .field{margin-bottom:18px}
   .field label{display:block;font-family:"Space Grotesk";font-weight:600;font-size:.82rem;margin-bottom:7px;text-transform:uppercase;letter-spacing:.08em}
   .field input,.field textarea{
@@ -841,23 +862,117 @@ transform:none;
 </div></section>
 
 <!-- CONTACT -->
-<section class="section" id="contact"><div class="wrap reveal">
-  <div class="contact">
-    <div class="contact-l">
-      <span class="eyebrow">Let's build</span>
-      <h2>Bring the brief, the wild idea, or the messy brand folder.</h2>
-      <p>Whether you're starting from scratch or relaunching, this is a strong place to begin. We'll turn it into something people recognize.</p>
-      <img class="fox" src="images/fox-mark.png" alt="" />
-    </div>
-    <div class="contact-r">
-      <div class="field"><label for="cn">Name</label><input id="cn" type="text" autocomplete="name" /></div>
-      <div class="field"><label for="ce">Email</label><input id="ce" type="email" autocomplete="email" /></div>
-      <div class="field"><label for="cm">What are you building?</label><textarea id="cm"></textarea></div>
-      <button class="btn btn-primary" id="sendBtn">Send it over →</button>
+<section class="section" id="contact">
+  <div class="wrap reveal">
+    <div class="contact">
+
+      <!-- Left -->
+      <div class="contact-l">
+        <span class="eyebrow">Let's build</span>
+
+        <h2>
+          Bring the brief,<br>
+          the wild idea, or<br>
+          the messy brand folder.
+        </h2>
+
+        <p>
+          Whether you're starting from scratch or relaunching,
+          this is a strong place to begin.
+          We'll turn it into something people recognize.
+        </p>
+
+        <img class="fox" src="images/fox-mark.png" alt="Funky Fox">
+      </div>
+
+      <!-- Right -->
+      <div class="contact-r">
+
+        <form
+          id="contactForm"
+          action="https://formspree.io/f/mojodjdp"
+          method="POST"
+        >
+
+          <input
+            type="hidden"
+            name="_subject"
+            value="New Website Enquiry • Funky Fox"
+          >
+
+          <!-- Honeypot -->
+          <input
+            type="text"
+            name="_gotcha"
+            style="display:none"
+            tabindex="-1"
+            autocomplete="off"
+          >
+
+          <div class="field">
+            <label>Name</label>
+            <input
+              type="text"
+              name="Name"
+              placeholder="John Doe"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Email</label>
+            <input
+              type="email"
+              name="Email"
+              placeholder="john@example.com"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Project Type</label>
+
+            <select
+              name="Project"
+              required
+            >
+              <option value="">Choose one...</option>
+              <option>Website</option>
+              <option>Landing Page</option>
+              <option>Social Media</option>
+              <option>Brand Identity</option>
+              <option>Complete Brand Package</option>
+              <option>Something else</option>
+            </select>
+
+          </div>
+
+          <div class="field">
+            <label>What are you building?</label>
+
+            <textarea
+              name="Message"
+              placeholder="Tell us a little about your project..."
+              required
+            ></textarea>
+
+          </div>
+
+          <button
+            class="btn btn-primary"
+            id="sendBtn"
+            type="submit"
+          >
+            Send it over →
+          </button>
+
+        </form>
+
+      </div>
+
     </div>
   </div>
-</div></section>
-
+</section>
 </main>
 
 <!-- FOOTER -->

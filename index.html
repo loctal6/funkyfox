@@ -286,6 +286,37 @@ background:#bbb;
   object-fit:cover;
 }
 
+.live-preview{
+  position:relative;
+  height:368px;
+  overflow:hidden;
+  background:#fff;
+  pointer-events:none;
+}
+
+.live-preview iframe{
+  position:absolute;
+  top:0;
+  left:0;
+
+  width:1440px;
+  height:900px;
+
+  border:0;
+
+  transform:scale(.455);
+  transform-origin:top left;
+
+  pointer-events:none;
+}
+.portfolio-card:hover .live-preview iframe{
+  transform:scale(.48);
+  transition:transform 1.2s ease;
+}
+
+.live-preview iframe{
+  transition:transform 1.2s ease;
+}
 .phone{
 
     border:2px solid var(--ink);
@@ -629,48 +660,54 @@ button:disabled{
 
             <div class="work-grid website-grid">
                 <a class="portfolio-card website"
-                   href="https://vyntramedia.in"
-                   target="_blank">
-                    <div class="browser">
-  <div class="browser-top">
-    <span></span><span></span><span></span>
+   href="https://vyntramedia.in"
+   target="_blank"
+   rel="noopener noreferrer">
+
+  <div class="browser">
+    <div class="browser-top">
+      <span></span><span></span><span></span>
+    </div>
+
+    <div class="browser-preview live-preview">
+      <iframe
+        src="https://vyntramedia.in"
+        title="Vyntra Media website preview"
+        loading="lazy"
+        tabindex="-1"
+      ></iframe>
+    </div>
   </div>
 
-  <div class="browser-preview">
-    <video autoplay muted loop playsinline preload="metadata">
-      <source src="videos/vyntra_example.webm" type="video/webm" />
-    </video>
+  <div class="portfolio-info">
+    <h3>Vyntra Media</h3>
+    <span>Creative Agency Website</span>
   </div>
-</div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Vyntra Media</h3>
-                        <span>Corporate Website</span>
-                    </div>
-                </a>
+</a>
                 <a class="portfolio-card website"
    href="https://seedscg.com"
-   target="_blank">
+   target="_blank"
+   rel="noopener noreferrer">
 
-    <div class="browser">
-  <div class="browser-top">
-    <span></span><span></span><span></span>
-  </div>
-
-  <div class="browser-preview">
-    <video autoplay muted loop playsinline preload="metadata">
-      <source src="videos/seedscg_example.webm" type="video/webm" />
-    </video>
-  </div>
-</div>
-
+  <div class="browser">
+    <div class="browser-top">
+      <span></span><span></span><span></span>
     </div>
 
-    <div class="portfolio-info">
-        <h3>Seeds Consultancy</h3>
-        <span>Corporate Website</span>
+    <div class="browser-preview live-preview">
+      <iframe
+        src="https://seedscg.com"
+        title="Seeds Consulting Website Preview"
+        loading="lazy"
+        tabindex="-1"
+      ></iframe>
     </div>
+  </div>
 
+  <div class="portfolio-info">
+    <h3>Seeds Consulting Group</h3>
+    <span>Corporate Website</span>
+  </div>
 </a>
             </div>
         </div>

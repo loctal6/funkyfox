@@ -185,42 +185,383 @@
   .svc-visual p{position:relative;z-index:1;color:rgba(247,244,238,.78);margin:14px 0 0}
 
   /* ---------- WORK / PORTFOLIO ---------- */
-  .work-head{margin-bottom:42px;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+  /* ---------- SELECTED WORK SHOWCASE ---------- */
+.selected-work{
+  background:var(--paper-2);
+  padding-top:clamp(28px, 4vw, 56px);
+}
+
+.work-scroll{
+  position:relative;
+  min-height:calc(var(--project-count, 7) * 82vh);
+}
+
+.work-showcase{
+  display:grid;
+  grid-template-columns:minmax(280px, .9fr) minmax(0, 1.1fr);
+  gap:clamp(22px, 3.5vw, 48px);
+  align-items:center;
+}
+
+@media(min-width:901px){
+  .work-showcase{
+    position:sticky;
+    top:96px;
+    min-height:calc(100vh - 120px);
+  }
+  .project-preview{
+    align-self:start;
+    z-index:1;
+  }
+}
+
+
+.project-list{
+  border-top:1px solid var(--line);
+  position:relative;
+}
+
+.project{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  min-height:86px;
+  padding:22px 4px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  opacity:.32;
+  position:relative;
+  transition:
+    opacity .35s ease,
+    padding .35s ease,
+    transform .35s ease;
+}
+
+.project.active{
+  opacity:1;
+  padding-left:18px;
+  transform:translateX(0);
+}
+
+.project.active::before{
+  content:"";
+  position:absolute;
+  left:-1px;
+  width:5px;
+  height:52px;
+  border-radius:999px;
+  background:var(--orange);
+}
+
+.project-number{
+  width:44px;
+  flex:0 0 44px;
+  color:var(--muted);
+  font-family:"Space Grotesk",sans-serif;
+  font-size:1.35rem;
+  font-weight:700;
+  transition:color .28s ease;
+}
+
+.project.active .project-number{
+  color:var(--orange);
+}
+
+.project-copy{
+  display:grid;
+  gap:4px;
+}
+
+.project-copy strong{
+  font-family:"Space Grotesk",sans-serif;
+  font-size:clamp(1.1rem, 1.8vw, 1.45rem);
+  line-height:1.05;
+  transition:transform .28s ease, color .28s ease;
+}
+
+.project.active .project-copy strong{
+  transform:translateX(6px);
+}
+
+.project-copy small{
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.project-preview{
+  min-height:0;
+  height:min(calc(100vh - 112px), 720px);
+  display:grid;
+  grid-template-rows:minmax(0, 1fr) auto;
+  position:relative;
+  isolation:isolate;
+  gap:18px;
+}
+
+.preview-number-bg{
+  position:absolute;
+  left:50%;
+  top:44%;
+  z-index:-1;
+  transform:translate(-50%, -50%);
+  color:rgba(10,10,10,.055);
+  font-family:"Space Grotesk",sans-serif;
+  font-size:clamp(13rem, 25vw, 25rem);
+  font-weight:700;
+  letter-spacing:-.12em;
+  line-height:1;
+  user-select:none;
+  transition:opacity .3s ease;
+}
+
+.preview-link{
+  display:grid;
+  place-items:center;
+  min-height:0;
+  height:100%;
+  align-self:stretch;
+  overflow:hidden;
+}
+
+.laptop-view,
+.phone-view{
+  grid-area:1 / 1;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  visibility:hidden;
+  transform:translate3d(0, 16px, 0) scale(.985);
+  transition:
+    opacity .42s cubic-bezier(.22, 1, .36, 1),
+    transform .42s cubic-bezier(.22, 1, .36, 1),
+    visibility .42s;
+  will-change:opacity, transform;
+  pointer-events:none;
+}
+
+.laptop-view.active,
+.phone-view.active{
+  opacity:1;
+  visibility:visible;
+  transform:translate3d(0, 0, 0);
+  pointer-events:auto;
+  z-index:1;
+}
+
+.laptop-view.is-leaving,
+.phone-view.is-leaving{
+  opacity:0;
+  transform:translate3d(0, -10px, 0) scale(.985);
+  z-index:0;
+}
+
+.showcase-laptop{
+  width:min(100%, var(--preview-width, 500px));
+  max-width:100%;
+  padding:12px;
+  border:2px solid var(--ink);
+  border-radius:18px;
+  background:var(--ink);
+  box-shadow:0 32px 70px rgba(10,10,10,.18);
+  transform:none;
+  transition:box-shadow .35s ease;
+}
+
+.preview-link:hover .showcase-laptop{
+  box-shadow:0 42px 80px rgba(10,10,10,.24);
+}
+
+.showcase-screen{
+  position:relative;
+  width:100%;
+  aspect-ratio:1440 / 900;
+  overflow:hidden;
+  border-radius:10px;
+  background:#fff;
+}
+
+.showcase-screen iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  pointer-events:none;
+}
+
+.showcase-phone{
+  width:min(248px, 62vw);
+  max-height:100%;
+  padding:10px;
+  border:2px solid var(--ink);
+  border-radius:38px;
+  background:var(--ink);
+  box-shadow:0 32px 70px rgba(10,10,10,.2);
+  transition:transform .35s ease, box-shadow .35s ease;
+}
+
+.preview-link:hover .showcase-phone{
+  transform:translateY(-10px) rotate(1deg);
+  box-shadow:0 42px 80px rgba(10,10,10,.27);
+}
+
+.phone-speaker{
+  width:90px;
+  height:6px;
+  margin:4px auto 11px;
+  border-radius:999px;
+  background:#303030;
+}
+
+.showcase-phone video{
+  width:100%;
+  aspect-ratio:9 / 16;
+  object-fit:cover;
+  border-radius:26px;
+  background:#000;
+}
+
+.preview-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  align-items:end;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+
+.preview-meta span{
+  display:block;
+  margin-bottom:7px;
+  color:var(--orange);
+  font-family:"Space Grotesk",sans-serif;
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+.preview-meta h3{
+  font-size:clamp(1.35rem, 2.4vw, 2rem);
+}
+
+.preview-meta p{
+  max-width:20ch;
+  margin:0;
+  color:var(--muted);
+  font-size:.9rem;
+  text-align:right;
+}
+
+@keyframes projectReveal{
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+@media(max-width:900px){
+  .work-scroll{
+    min-height:0;
+  }
+
+  .work-showcase{
+    grid-template-columns:1fr;
+    position:static;
+    min-height:0;
+  }
+
+  .project-preview{
+    height:auto;
+    margin-top:8px;
+  }
+
+  .preview-link{
+    min-height:320px;
+  }
+
+  .showcase-screen{
+    height:min(360px, 62vw);
+  }
+
+  .showcase-screen iframe{
+    transform:scale(.4);
+  }
+}
+
+@media(max-width:560px){
+  .project{
+    padding-block:18px;
+  }
+
+  .project-copy strong{
+    font-size:1.05rem;
+  }
+
+  .preview-link{
+    min-height:300px;
+  }
+
+  .showcase-laptop{
+    padding:8px;
+    border-radius:13px;
+    transform:none;
+  }
+
+  .showcase-screen{
+    height:230px;
+    border-radius:6px;
+  }
+
+  .showcase-screen iframe{
+    transform:scale(.255);
+  }
+
+  .preview-meta{
+    align-items:start;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .preview-meta p{
+    text-align:left;
+  }
+}
+  .work-head{margin-bottom:22px;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
   .work-head p{max-width:36ch;color:var(--muted);margin:0}
+  .selected-work .section-title{font-size:clamp(2.4rem,4.8vw,3.8rem);max-width:12ch}
   .work-stack{display:grid;gap:58px;margin-top:50px}
   .work-panel{display:block}
   .work-panel h3.work-section-title{
     font-size:clamp(1.8rem,3vw,2.6rem);
     margin-bottom:14px;
   }
-
-.work-grid{
+  .work-grid{
     display:flex;
     gap:22px;
-
     overflow-x:auto;
     overflow-y:visible;
-
     padding:18px 4px 24px;
-
     scroll-behavior:smooth;
-
     -webkit-overflow-scrolling:touch;
-
     align-items:flex-start;
 }
-
-.work-grid::-webkit-scrollbar{
-
-display:none;
-
-}
-
-.website{
-
-min-width:700px;
-
-}
+  .work-grid::-webkit-scrollbar{
+    display:none;
+  }
+  .website{
+    min-width:700px;
+  }
 
 .social{
 
@@ -229,48 +570,31 @@ min-width:260px;
 }
 
 .browser{
-
     border:2px solid var(--ink);
-
     border-radius:18px;
-
     overflow:hidden;
-
     background:#fff;
-
     will-change:transform;
-
     transition:
         transform .35s ease,
         border-color .35s ease;
 
 }
+
 .browser-top{
-
 height:42px;
-
 background:#eee;
-
 display:flex;
-
 align-items:center;
-
 padding:0 18px;
-
 gap:8px;
-
 }
 
 .browser-top span{
-
-width:11px;
-
-height:11px;
-
-border-radius:50%;
-
-background:#bbb;
-
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#bbb;
 }
 
 .browser-preview{
@@ -298,17 +622,14 @@ background:#bbb;
   position:absolute;
   top:0;
   left:0;
-
   width:1440px;
   height:900px;
-
   border:0;
-
   transform:scale(.455);
   transform-origin:top left;
-
   pointer-events:none;
 }
+
 .portfolio-card:hover .live-preview iframe{
   transform:scale(.48);
   transition:transform 1.2s ease;
@@ -317,55 +638,37 @@ background:#bbb;
 .live-preview iframe{
   transition:transform 1.2s ease;
 }
+
 .phone{
-
     border:2px solid var(--ink);
-
     border-radius:32px;
-
     overflow:hidden;
-
     background:black;
-
     padding:10px;
-
     will-change:transform;
-
     transition:
         transform .35s ease,
         border-color .35s ease;
-
 }
 
 .phone video{
-
-width:100%;
-
-aspect-ratio:9/16;
-
-object-fit:cover;
-
-display:block;
-
-border-radius:20px;
-
+  width:100%;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  display:block;
+  border-radius:20px;
 }
 
 .portfolio-card{
-
     color:inherit;
     text-decoration:none;
-
     flex-shrink:0;
-
     display:block;
-
     padding-top:8px;
 }
 
 .browser,
 .phone{
-
     transition:
         transform .35s ease,
         filter .35s ease;
@@ -374,50 +677,32 @@ border-radius:20px;
 
 .portfolio-card:hover .browser,
 .portfolio-card:hover .phone{
-
     transform:translateY(-8px);
-
     border-color:var(--orange);
 
 }
 .portfolio-info{
-
-margin-top:16px;
-
+  margin-top:16px;
 }
 
 .portfolio-info h3{
-
-margin:0;
-
-font-size:1.2rem;
-
+  margin:0;
+  font-size:1.2rem;
 }
 
 .portfolio-info span{
-
-color:var(--muted);
-
+  color:var(--muted);
 }
 
 @keyframes fade{
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
-}
-
-to{
-
-opacity:1;
-
-transform:none;
-
-}
-
+  from{
+  opacity:0;
+  transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
   /* ---------- PROCESS ---------- */
   .proc{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:start}
@@ -523,6 +808,7 @@ button:disabled{
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}
     .reveal{opacity:1;transform:none}
+    .laptop-view,.phone-view{transform:none!important}
   }
 </style>
 </head>
@@ -635,210 +921,185 @@ button:disabled{
   </div>
 </div></section>
 
-<section class="section" id="work">
-
-<div class="wrap work-head reveal">
+<!--WORK-->
+<section class="section selected-work" id="work">
+  <div class="wrap work-head reveal">
     <div>
-        <span class="eyebrow">Selected Work</span>
-        <h2 class="section-title">Proof beats promises.</h2>
+      <span class="eyebrow">Selected Work</span>
+      <h2 class="section-title">Proof beats promises.</h2>
     </div>
 
     <p>
-        Websites that convert. Socials that get noticed.
-        Click any project to experience it live.
+      Websites that convert. Socials that get noticed.
+      Scroll through the work. Each project takes over as you reach it.
     </p>
+  </div>
+
+<div class="work-scroll">
+<div class="wrap work-showcase">
+  <div class="project-list">
+
+<div
+  class="project active"
+  data-type="website"
+  data-number="01"
+  data-title="Vyntra Media"
+  data-category="Creative Agency Website"
+  data-url="https://vyntramedia.in"
+>
+  <span class="project-number">01</span>
+  <span class="project-copy">
+    <strong>Vyntra Media</strong>
+    <small>Website</small>
+  </span>
 </div>
 
-<div class="reveal">
+<div
+  class="project"
+  data-type="website"
+  data-number="02"
+  data-title="Seeds Consulting Group"
+  data-category="Corporate Website"
+  data-url="https://seedscg.com"
+>
+  <span class="project-number">02</span>
+  <span class="project-copy">
+    <strong>Seeds Consulting</strong>
+    <small>Website</small>
+  </span>
+</div>
 
-    <div class="wrap">
+<div
+  class="project"
+  data-type="phone"
+  data-number="03"
+  data-title="Senpai"
+  data-category="Instagram Content"
+  data-video="videos/senpai_vids.webm"
+  data-link="https://instagram.com/senpai"
+>
+  <span class="project-number">03</span>
+  <span class="project-copy">
+    <strong>Senpai</strong>
+    <small>Brand &amp; Social</small>
+  </span>
+</div>
 
-        <div class="work-stack">
+<div
+  class="project"
+  data-type="phone"
+  data-number="04"
+  data-title="FWD Home Interiors"
+  data-category="Instagram Content"
+  data-video="videos/FWD_vids.webm"
+  data-link="https://instagram.com/fwdhomeinteriors"
+>
+  <span class="project-number">04</span>
+  <span class="project-copy">
+    <strong>FWD Interiors</strong>
+    <small>Brand &amp; Social</small>
+  </span>
+</div>
 
-        <div class="work-panel" id="websites">
-            <h3 class="work-section-title">Websites</h3>
+<div
+  class="project"
+  data-type="phone"
+  data-number="05"
+  data-title="urbnr.blr"
+  data-category="Instagram Content"
+  data-video="videos/urbnr_vids.webm"
+  data-link="https://instagram.com/urbnr.blr"
+>
+  <span class="project-number">05</span>
+  <span class="project-copy">
+    <strong>urbnr.blr</strong>
+    <small>Brand &amp; Social</small>
+  </span>
+</div>
 
-            <div class="work-grid website-grid">
-                <a class="portfolio-card website"
-   href="https://vyntramedia.in"
-   target="_blank"
-   rel="noopener noreferrer">
+<div
+  class="project"
+  data-type="phone"
+  data-number="06"
+  data-title="Loop Talent"
+  data-category="Instagram Content"
+  data-video="videos/loop_vids.webm"
+  data-link="https://instagram.com/looptalent"
+>
+  <span class="project-number">06</span>
+  <span class="project-copy">
+    <strong>Loop Talent</strong>
+    <small>Brand &amp; Social</small>
+  </span>
+</div>
 
-  <div class="browser">
-    <div class="browser-top">
-      <span></span><span></span><span></span>
-    </div>
+<div
+  class="project"
+  data-type="phone"
+  data-number="07"
+  data-title="Gleo.ai"
+  data-category="Mobile App"
+  data-video="videos/gleoai.webm"
+  data-link="https://yourapp.com"
+>
+  <span class="project-number">07</span>
+  <span class="project-copy">
+    <strong>Gleo.ai</strong>
+    <small>Mobile App</small>
+  </span>
+</div>
 
-    <div class="browser-preview live-preview">
-      <iframe
-        src="https://vyntramedia.in"
-        title="Vyntra Media website preview"
-        loading="lazy"
-        tabindex="-1"
-      ></iframe>
-    </div>
   </div>
 
-  <div class="portfolio-info">
-    <h3>Vyntra Media</h3>
-    <span>Creative Agency Website</span>
-  </div>
-</a>
-                <a class="portfolio-card website"
-   href="https://seedscg.com"
-   target="_blank"
-   rel="noopener noreferrer">
 
-  <div class="browser">
-    <div class="browser-top">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="project-preview" id="projectPreview">
+      
+      <!-- PROJECT PREVIEW -->
+      
+      <span class="preview-number-bg" id="previewNumber">01</span>
 
-    <div class="browser-preview live-preview">
-      <iframe
-        src="https://seedscg.com"
-        title="Seeds Consulting Website Preview"
-        loading="lazy"
-        tabindex="-1"
-      ></iframe>
-    </div>
-  </div>
-
-  <div class="portfolio-info">
-    <h3>Seeds Consulting Group</h3>
-    <span>Corporate Website</span>
-  </div>
-</a>
+      <a
+        class="preview-link"
+        id="previewLink"
+        href="https://vyntramedia.in"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="laptop-view active" id="laptopView">
+          <div class="showcase-laptop">
+            <div class="showcase-screen">
+              <iframe
+                id="projectIframe"
+                src="https://vyntramedia.in"
+                title="Vyntra Media website preview"
+                loading="lazy"
+                tabindex="-1"
+              ></iframe>
             </div>
+          </div>
         </div>
 
-        <div class="work-panel" id="socials">
-            <h3 class="work-section-title">Socials</h3>
-            <div class="work-grid social-grid">
-                <a class="portfolio-card social"
-                   href="https://instagram.com/yourpage"
-                   target="_blank">
-                    <div class="phone">
-                        <video autoplay muted loop playsinline>
-                            <source src="videos/senpai.mp4">
-                        </video>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Senpai</h3>
-                        <span>Instagram</span>
-                    </div>
-                </a>
-                <a class="portfolio-card social"
-   href="https://instagram.com/senpai"
-   target="_blank">
-
-    <div class="phone">
-        <video autoplay muted loop playsinline>
-            <source src="videos/senpai.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="portfolio-info">
-        <h3>Senpai</h3>
-        <span>Instagram</span>
-    </div>
-
-</a>
-
-
-<a class="portfolio-card social"
-   href="https://instagram.com/fwdhomeinteriors"
-   target="_blank">
-
-    <div class="phone">
-        <video autoplay muted loop playsinline>
-            <source src="videos/fwd.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="portfolio-info">
-        <h3>FWD Home Interiors</h3>
-        <span>Instagram</span>
-    </div>
-
-</a>
-
-
-<a class="portfolio-card social"
-   href="https://instagram.com/urbnr.blr"
-   target="_blank">
-
-    <div class="phone">
-        <video autoplay muted loop playsinline>
-            <source src="videos/urbnr.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="portfolio-info">
-        <h3>urbnr.blr</h3>
-        <span>Instagram</span>
-    </div>
-
-</a>
-
-
-<a class="portfolio-card social"
-   href="https://instagram.com/looptalent"
-   target="_blank">
-
-    <div class="phone">
-        <video autoplay muted loop playsinline>
-            <source src="videos/loop.mp4" type="video/mp4">
-        </video>
-    </div>
-
-    <div class="portfolio-info">
-        <h3>Loop Talent</h3>
-        <span>Instagram</span>
-    </div>
-
-</a>
-            </div>
+        <div class="phone-view" id="phoneView">
+          <div class="showcase-phone">
+            <div class="phone-speaker"></div>
+            <video id="projectVideo" autoplay muted loop playsinline>
+              <source src="">
+            </video>
+          </div>
         </div>
+      </a>
 
-<div class="work-panel" id="apps">
-    <h3 class="work-section-title">Apps</h3>
-
-    <div class="work-grid social-grid">
-
-        <a class="portfolio-card social"
-           href="https://yourapp.com"
-           target="_blank">
-            <div class="phone">
-                <video autoplay muted loop playsinline>
-                    <source src="videos/app-demo.mp4">
-                </video>
-            </div>
-            <div class="portfolio-info">
-                <h3>Gleo.ai</h3>
-                <span>Mobile App</span>
-            </div>
-
-        </a>
-
+      <div class="preview-meta">
+        <div>
+          <span>Selected Project</span>
+          <h3 id="previewTitle">Vyntra Media</h3>
+        </div>
+        <p id="previewCategory">Creative Agency Website</p>
+      </div>
     </div>
-</div>
-
-</div>
-
-    </div>
-
-</div>
-</section>
-<!-- STATS -->
-<section class="section"><div class="wrap reveal">
-  <div class="stats">
-    <div class="stat"><b data-count="800" data-suffix="+">0</b><span>Campaigns Delivered</span></div>
-    <div class="stat"><b data-count="150" data-suffix="+">0</b><span>Websites Delivered</span></div>
-    <div class="stat"><b data-count="80" data-suffix="+">0</b><span>Apps Delivered</span></div>
-    <div class="stat"><b data-count="5" data-suffix="+">0</b><span>Years of Expertise</span></div>
   </div>
-</div></section>
+</div>
+</section>  
 
 <!-- FAQ -->
 <section class="section" id="faq" style="background:var(--paper-2)"><div class="wrap faq">
@@ -1058,6 +1319,168 @@ button:disabled{
     co.unobserve(b);
   }),{threshold:.6});
   document.querySelectorAll('.stat b').forEach(b=>co.observe(b));
+</script>
+<script>
+  // WORK — preview changes as each project reaches viewport centre
+(function () {
+  const projects = [...document.querySelectorAll(".project")];
+  if (!projects.length) return;
+
+  const workScroll = document.querySelector(".work-scroll");
+  const previewNumber = document.getElementById("previewNumber");
+  const previewTitle = document.getElementById("previewTitle");
+  const previewCategory = document.getElementById("previewCategory");
+  const previewLink = document.getElementById("previewLink");
+  const laptopView = document.getElementById("laptopView");
+  const phoneView = document.getElementById("phoneView");
+  const projectIframe = document.getElementById("projectIframe");
+  const projectVideo = document.getElementById("projectVideo");
+  const previewFrame = document.querySelector(".project-preview");
+
+  const desktopMQ = matchMedia("(min-width: 901px)");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let activeProject = projects.find((p) => p.classList.contains("active")) || projects[0];
+  let pendingProject = null;
+  let activationFrame = null;
+  let scrollFrame = null;
+
+  workScroll?.style.setProperty("--project-count", projects.length);
+
+  function syncPreviewSizing() {
+    if (!previewFrame) return;
+    const width = previewFrame.getBoundingClientRect().width;
+    const mode = previewFrame.dataset.previewType || "website";
+    const limit = mode === "website" ? 500 : 260;
+    const inset = mode === "website" ? 86 : 58;
+    const available = Math.max(mode === "website" ? 320 : 220, Math.min(limit, width - inset));
+    previewFrame.style.setProperty("--preview-width", `${available}px`);
+  }
+
+  function waitForWebsite(url, done) {
+    previewLink.href = url;
+    try {
+      if (new URL(projectIframe.src).href === new URL(url, location.href).href) {
+        done();
+        return;
+      }
+    } catch (_) {}
+
+    const onLoad = () => {
+      projectIframe.removeEventListener("load", onLoad);
+      done();
+    };
+    projectIframe.addEventListener("load", onLoad);
+    projectIframe.src = url;
+  }
+
+  function waitForPhone(link, videoSrc, done) {
+    previewLink.href = link;
+
+    if (projectVideo.dataset.currentSrc === videoSrc) {
+      projectVideo.play().catch(() => {});
+      done();
+      return;
+    }
+
+    const onReady = () => {
+      projectVideo.removeEventListener("loadeddata", onReady);
+      projectVideo.dataset.currentSrc = videoSrc;
+      projectVideo.play().catch(() => {});
+      done();
+    };
+
+    projectVideo.addEventListener("loadeddata", onReady);
+    projectVideo.src = videoSrc;
+    projectVideo.load();
+  }
+
+  function swapPreviewViews(type) {
+    const showView = type === "website" ? laptopView : phoneView;
+    const hideView = type === "website" ? phoneView : laptopView;
+
+    hideView.classList.remove("active", "is-leaving");
+    showView.classList.add("active");
+    showView.classList.remove("is-leaving");
+  }
+
+  function crossfadePreviewViews(type) {
+    const showView = type === "website" ? laptopView : phoneView;
+    const hideView = type === "website" ? phoneView : laptopView;
+
+    if (hideView.classList.contains("active")) {
+      hideView.classList.add("is-leaving");
+      hideView.classList.remove("active");
+    }
+
+    requestAnimationFrame(() => {
+      showView.classList.add("active");
+      showView.classList.remove("is-leaving");
+    });
+  }
+
+  function activateProject(project) {
+    if (project === activeProject) return;
+
+    activeProject = project;
+    projects.forEach((item) => item.classList.remove("active"));
+    project.classList.add("active");
+
+    const { type, number, title, category, url, video, link } = project.dataset;
+    previewFrame.dataset.previewType = type;
+
+    previewNumber.textContent = number;
+    previewTitle.textContent = title;
+    previewCategory.textContent = category;
+
+    const applyViews = () => {
+      if (reducedMotion) swapPreviewViews(type);
+      else crossfadePreviewViews(type);
+    };
+
+    if (type === "website") waitForWebsite(url, applyViews);
+    else waitForPhone(link, video, applyViews);
+  }
+
+  function queueActivate(project) {
+    pendingProject = project;
+    if (activationFrame) return;
+
+    activationFrame = requestAnimationFrame(() => {
+      activationFrame = null;
+      const next = pendingProject;
+      pendingProject = null;
+      if (next) activateProject(next);
+    });
+  }
+
+  function syncProjectToScroll() {
+    scrollFrame = null;
+    if (!workScroll || !desktopMQ.matches) return;
+
+    const rect = workScroll.getBoundingClientRect();
+    const stickyTop = 96;
+    const scrollable = Math.max(rect.height - window.innerHeight, 1);
+    const progress = Math.min(Math.max((stickyTop - rect.top) / scrollable, 0), 1);
+    const index = Math.min(projects.length - 1, Math.round(progress * (projects.length - 1)));
+
+    queueActivate(projects[index]);
+  }
+
+  function scheduleScrollSync() {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(syncProjectToScroll);
+  }
+
+  syncPreviewSizing();
+  addEventListener("scroll", scheduleScrollSync, { passive: true });
+  addEventListener("resize", () => {
+    syncPreviewSizing();
+    scheduleScrollSync();
+  }, { passive: true });
+  desktopMQ.addEventListener("change", scheduleScrollSync);
+  syncProjectToScroll();
+})();
 </script>
 </body>
 </html>

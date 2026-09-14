@@ -1008,6 +1008,40 @@ button:disabled{
     .hero-art{order:-1;min-height:240px}
     .svc-visual{position:static;min-height:auto}
     .proc-aside,.svc-visual{position:static}
+
+    /* --- relocated service visual: sits inside the open accordion item --- */
+    .svc-item .svc-visual{
+      min-height:300px;
+      padding:24px;
+      margin:0 0 22px;
+      border-radius:var(--r);
+      animation:panelIn .32s ease both;
+    }
+    .svc-item .svc-visual .vnum{font-size:3rem}
+    .svc-item .svc-visual h3{font-size:1.5rem}
+    .svc-item .svc-visual p{font-size:.92rem;margin-top:10px}
+    /* the number is already on the tab row, so drop it from the card */
+    .svc-item .svc-visual .vnum{display:none}
+
+    /* --- relocated work preview: sits under the active project row --- */
+    .project-list .project-preview{
+      height:auto;
+      margin:4px 0 22px;
+      padding-bottom:4px;
+      animation:panelIn .32s ease both;
+    }
+    .project-list .preview-number-bg{display:none}
+    .project-list .preview-link{min-height:0;padding-inline:0}
+    .project-list .showcase-laptop{width:100%}
+    .project-list .showcase-phone{width:min(300px,66vw)}
+    /* title and category already sit in the row above, so trim the repeat */
+    .project-list .preview-meta{padding-top:14px}
+    .project-list .preview-meta h3{font-size:1.15rem}
+
+    @keyframes panelIn{
+      from{opacity:0;transform:translateY(-8px)}
+      to{opacity:1;transform:none}
+    }
     .stats{grid-template-columns:1fr 1fr}
     .stat:nth-child(2){border-right:0}.stat{border-bottom:1px solid rgba(247,244,238,.14)}
     .nav-links{display:none}
@@ -1019,6 +1053,7 @@ button:disabled{
   }
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important}
+    .svc-item .svc-visual,.project-list .project-preview{animation:none}
     .reveal{opacity:1;transform:none}
     .laptop-view,.phone-view{transform:none!important}
   }
@@ -1513,12 +1548,24 @@ button:disabled{
     setVisual(it.dataset.vimg);
   }
   openItem(items[0]);
-  // activate the item nearest the viewport center on scroll
+
+  // Scroll-driven opening is a DESKTOP behaviour only. On mobile the visual
+  // card is moved inside the open item, so opening one changes document
+  // height and would re-fire the observer against the user's own tap.
+  const svcDesktopMQ = matchMedia('(min-width: 901px)');
   const svcObserver=new IntersectionObserver(es=>{
+    if(!svcDesktopMQ.matches) return;
     es.forEach(en=>{ if(en.isIntersecting) openItem(en.target); });
   },{rootMargin:'-45% 0px -45% 0px',threshold:0});
-  items.forEach(it=>svcObserver.observe(it));
-  // still allow click as a fallback
+
+  function syncSvcObserver(){
+    if(svcDesktopMQ.matches) items.forEach(it=>svcObserver.observe(it));
+    else items.forEach(it=>svcObserver.unobserve(it));
+  }
+  syncSvcObserver();
+  svcDesktopMQ.addEventListener('change',syncSvcObserver);
+
+  // Tap / click always works, on both breakpoints.
   items.forEach(it=>it.querySelector('.svc-tab').addEventListener('click',()=>openItem(it)));
 
   // FAQ
@@ -1756,6 +1803,71 @@ button:disabled{
   syncPreviewSizing();
   addEventListener("resize", syncPreviewSizing, { passive: true });
   desktopMQ.addEventListener("change", syncPreviewSizing);
+})();
+</script>
+
+<script>
+/* MOBILE LAYOUT: move the visual panels next to whichever row is active.
+   On desktop both panels return to their original slot in the grid, so the
+   desktop layout is byte-for-byte what it was. */
+(function () {
+  const mobileMQ = matchMedia("(max-width: 900px)");
+
+  const svcVisual  = document.querySelector(".svc-visual");
+  const workPanel  = document.querySelector(".project-preview");
+  const projectList = document.querySelector(".project-list");
+
+  // Anchors marking where each panel lives on desktop.
+  function anchorFor(el) {
+    if (!el || !el.parentNode) return null;
+    const a = document.createComment("panel-home");
+    el.parentNode.insertBefore(a, el);
+    return a;
+  }
+  const svcHome  = anchorFor(svcVisual);
+  const workHome = anchorFor(workPanel);
+
+  function place() {
+    const mobile = mobileMQ.matches;
+
+    // --- services: card goes INSIDE the open item (a div, so nesting is fine)
+    if (svcVisual) {
+      if (mobile) {
+        const open = document.querySelector(".svc-item.open");
+        const body = open && open.querySelector(".svc-body");
+        if (body && svcVisual.previousElementSibling !== body) {
+          body.insertAdjacentElement("afterend", svcVisual);
+        }
+      } else if (svcHome && svcVisual.previousSibling !== svcHome) {
+        svcHome.parentNode.insertBefore(svcVisual, svcHome.nextSibling);
+      }
+    }
+
+    // --- work: preview goes AFTER the active row. It must NOT go inside,
+    //     because .project is a <button> and the preview holds an <a>;
+    //     a link nested in a button is invalid and stops being clickable.
+    if (workPanel) {
+      if (mobile) {
+        const active = projectList && projectList.querySelector(".project.active");
+        if (active && active.nextElementSibling !== workPanel) {
+          active.insertAdjacentElement("afterend", workPanel);
+        }
+      } else if (workHome && workPanel.previousSibling !== workHome) {
+        workHome.parentNode.insertBefore(workPanel, workHome.nextSibling);
+      }
+    }
+  }
+
+  // React to the class flips the existing scripts already perform.
+  const mo = new MutationObserver((records) => {
+    if (records.some((r) => r.attributeName === "class")) place();
+  });
+  document.querySelectorAll(".svc-item, .project").forEach((el) =>
+    mo.observe(el, { attributes: true, attributeFilter: ["class"] })
+  );
+
+  mobileMQ.addEventListener("change", place);
+  place();
 })();
 </script>
 </body>

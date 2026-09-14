@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Funky Fox — Brand, web & content studio</title>
-<meta name="description" content="Funky Fox is a creative studio building sharp brand identities, fast websites, and content systems for ambitious teams." />
+<title>Funky Fox | Brand, web and content studio</title>
+<meta name="description" content="Funky Fox is a Bengaluru studio building brand identities, websites, social content and video for growing companies." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -173,16 +173,41 @@
   .svc-body-inner .tags span{font-family:"Space Grotesk";font-size:.78rem;padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink)}
   .svc-visual{
     position:sticky;top:100px;align-self:start;border:2px solid var(--ink);border-radius:var(--r-lg);
-    background:var(--ink);color:var(--paper);padding:38px;min-height:440px;overflow:hidden;
+    background:var(--ink);color:var(--paper);padding:38px;min-height:520px;overflow:hidden;
     display:flex;flex-direction:column;justify-content:space-between;transition:.4s;
+    isolation:isolate;
+  }
+  /* image layers: two stacked <img> that ping-pong so swaps crossfade */
+  .svc-img-stack{position:absolute;inset:0;z-index:0}
+  .svc-img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:center 38%;
+    opacity:0;transition:opacity .5s ease;
+  }
+  .svc-img.is-on{opacity:1}
+  /* scrim keeps the headline and body copy legible over any frame */
+  .svc-scrim{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      linear-gradient(to top, rgba(10,10,10,.94) 26%, rgba(10,10,10,.55) 55%, rgba(10,10,10,.25) 100%),
+      linear-gradient(to right, rgba(10,10,10,.7), transparent 55%);
   }
   .svc-visual::after{
     content:"";position:absolute;right:-80px;bottom:-80px;width:280px;height:280px;border-radius:50%;
-    background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.5;transition:.4s;
+    background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.28;transition:.4s;z-index:2;
+    pointer-events:none;
   }
-  .svc-visual .vnum{font-family:"Space Grotesk";font-size:5rem;font-weight:700;color:var(--orange);line-height:1}
-  .svc-visual h3{font-size:clamp(1.6rem,3vw,2.4rem);position:relative;z-index:1}
-  .svc-visual p{position:relative;z-index:1;color:rgba(247,244,238,.78);margin:14px 0 0}
+  .svc-visual .vnum,
+  .svc-visual-copy{position:relative;z-index:3}
+  @media(prefers-reduced-motion:reduce){
+    .svc-img{transition:none}
+  }
+  .svc-visual .vnum{font-family:"Space Grotesk";font-size:5rem;font-weight:700;color:var(--orange);line-height:1;
+    text-shadow:0 2px 24px rgba(10,10,10,.7)}
+  .svc-visual h3{font-size:clamp(1.6rem,3vw,2.4rem);position:relative;z-index:3;
+    text-shadow:0 2px 18px rgba(10,10,10,.8)}
+  .svc-visual p{position:relative;z-index:3;color:rgba(247,244,238,.88);margin:14px 0 0;
+    text-shadow:0 1px 12px rgba(10,10,10,.85)}
 
   /* ---------- WORK / PORTFOLIO ---------- */
   /* ---------- SELECTED WORK SHOWCASE ---------- */
@@ -193,7 +218,6 @@
 
 .work-scroll{
   position:relative;
-  min-height:calc(var(--project-count, 7) * 82vh);
 }
 
 .work-showcase{
@@ -205,9 +229,7 @@
 
 @media(min-width:901px){
   .work-showcase{
-    position:sticky;
-    top:96px;
-    min-height:calc(100vh - 120px);
+    min-height:calc(100vh - 160px);
   }
   .project-preview{
     align-self:start;
@@ -223,6 +245,11 @@
 
 .project{
   width:100%;
+  font:inherit;
+  color:inherit;
+  background:none;
+  border:0;
+  cursor:pointer;
   display:flex;
   align-items:center;
   gap:18px;
@@ -238,7 +265,19 @@
     transform .35s ease;
 }
 
-.project.active{
+.project:hover,
+.project:focus-visible{
+  opacity:.7;
+}
+
+.project:focus-visible{
+  outline:2px solid var(--orange);
+  outline-offset:3px;
+  border-radius:8px;
+}
+
+.project.active,
+.project.active:hover{
   opacity:1;
   padding-left:18px;
   transform:translateX(0);
@@ -296,7 +335,7 @@
   min-height:0;
   height:min(calc(100vh - 96px), 820px);
   display:grid;
-  grid-template-rows:minmax(0, 1fr) auto;
+  grid-template-rows:minmax(0, 1fr) auto auto;
   position:relative;
   isolation:isolate;
   gap:18px;
@@ -508,6 +547,90 @@
   display:block;
   border-radius:34px;
   background:#000;
+}
+
+.media-error .showcase-screen::after,
+.media-error .showcase-phone::after{
+  content:"Preview unavailable. Click to open it directly ↗";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  text-align:center;
+  font-family:"Space Grotesk",sans-serif;
+  font-size:.82rem;
+  font-weight:600;
+  line-height:1.5;
+  color:var(--muted);
+  background:var(--paper-2);
+}
+
+.media-error .showcase-phone{
+  position:relative;
+}
+
+.media-error .showcase-phone::after{
+  border-radius:34px;
+}
+
+.preview-hint{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0;
+  font-family:"Space Grotesk",sans-serif;
+  font-size:.78rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  color:var(--muted);
+}
+
+.preview-hint .hint-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--orange);
+  flex-shrink:0;
+  animation:hintPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes hintPulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.5);opacity:.45}
+}
+
+.preview-link{
+  position:relative;
+}
+
+.preview-link::after{
+  content:"Open ↗";
+  position:absolute;
+  top:10px;
+  right:14px;
+  z-index:3;
+  padding:7px 14px;
+  border-radius:999px;
+  border:2px solid var(--ink);
+  background:var(--orange);
+  color:#fff;
+  font-family:"Space Grotesk",sans-serif;
+  font-size:.74rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  opacity:0;
+  transform:translateY(-6px);
+  transition:opacity .25s ease, transform .25s ease;
+  pointer-events:none;
+}
+
+.preview-link:hover::after,
+.preview-link:focus-visible::after{
+  opacity:1;
+  transform:translateY(0);
 }
 
 .preview-meta{
@@ -909,7 +1032,6 @@ button:disabled{
   <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#work">Work</a>
-    <a href="#process">Process</a>
     <a href="#faq">FAQ</a>
   </div>
   <a class="nav-cta" href="#contact">Start a project →</a>
@@ -921,12 +1043,12 @@ button:disabled{
 <header class="hero"><div class="wrap"><div class="hero-grid">
   <div class="hero-copy reveal">
     <span class="eyebrow hero-kicker">Brand · Web · Content studio</span>
-    <h1>Brands with <span class="fill">bite</span>,<br><span class="out">built to</span> be<br>impossible<br>to ignore.</h1>
-    <p class="hero-sub">We're a small studio that makes sharp identities, fast websites, and content that actually moves — no fluff, no filler, no waiting around.</p>
+    <h1>Brands with <span class="fill">bite</span>,<br><span class="out">built to</span> be<br>hard to<br>ignore.</h1>
+    <p class="hero-sub">A small studio in Bengaluru. We build identities, websites, social content and video, and we hand them over finished.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="#work">See the work →</a>
       <a class="btn btn-ghost" href="#contact">Let's talk</a>
-      <span class="hero-note">Strategy first. Noise never.</span>
+      <span class="hero-note">Bengaluru based. Clients everywhere.</span>
     </div>
   </div>
 <div class="hero-art reveal">
@@ -940,17 +1062,17 @@ button:disabled{
 
 <!-- MARQUEE -->
 <div class="marquee"><div class="marquee-track">
-  <span>Brand identity</span><span>Websites that convert</span><span>Social that lands</span><span>Content systems</span><span>Launch campaigns</span>
-  <span>Brand identity</span><span>Websites that convert</span><span>Social that lands</span><span>Content systems</span><span>Launch campaigns</span>
+  <span>Brand identity</span><span>Websites</span><span>Social media</span><span>Video and editing</span><span>Performance ads</span>
+  <span>Brand identity</span><span>Websites</span><span>Social media</span><span>Video and editing</span><span>Performance ads</span>
 </div></div>
 
 <!-- INTRO -->
 <section class="section"><div class="wrap intro reveal">
-  <p class="lead">Most early brands don't have a content problem. They have a <em>clarity</em> problem — five vendors, five voices, zero direction.</p>
+  <p class="lead">Most early brands do not have a content problem. They have a <em>clarity</em> problem. Five vendors, five voices, no direction.</p>
   <div class="pillars">
-    <div class="pillar"><div><b><span class="nm">01</span> &nbsp;One studio, one voice</b><p>Brand, site, and content built together so everything points the same way.</p></div></div>
-    <div class="pillar"><div><b><span class="nm">02</span> &nbsp;Built to look bigger</b><p>Sharp, considered work that makes a new brand feel established from day one.</p></div></div>
-    <div class="pillar"><div><b><span class="nm">03</span> &nbsp;Made to move fast</b><p>Tight scopes, clear timelines, and systems your team can actually run.</p></div></div>
+    <div class="pillar"><div><b><span class="nm">01</span> &nbsp;One studio, one voice</b><p>Brand, site and content get built together, so nothing on your page contradicts anything else.</p></div></div>
+    <div class="pillar"><div><b><span class="nm">02</span> &nbsp;Built to look bigger</b><p>A new brand should not look new. We design like you have been around for a while.</p></div></div>
+    <div class="pillar"><div><b><span class="nm">03</span> &nbsp;Made to move fast</b><p>Fixed scope, dates you can hold us to, and files your own team can pick up after.</p></div></div>
   </div>
 </div></section>
 
@@ -958,54 +1080,59 @@ button:disabled{
 <section class="section" id="services" style="background:var(--paper-2)"><div class="wrap">
   <div class="svc-head reveal">
     <div><span class="eyebrow">What we do</span><h2 class="section-title">Everything your brand needs to stop looking new.</h2></div>
-    <p>Scroll through — each service opens as you reach it. Every one is built to connect with the others.</p>
+    <p>Eight things we do. Open any one to see what is inside it. Most clients take three or four together.</p>
   </div>
   <div class="svc">
     <div class="svc-list reveal">
-      <div class="svc-item open" data-vnum="01" data-vtitle="Brand Creation" data-vcopy="Logos, ad designs, banners, and mood boards — a full visual identity that feels intentionally yours.">
+      <div class="svc-item open" data-vnum="01" data-vimg="images/services/01-brand-creation.webp" data-vtitle="Brand Creation" data-vcopy="Logo, ad designs, banners and mood boards. The full visual base for a new brand.">
         <button class="svc-tab"><span class="svc-num">01</span><span class="svc-name">Brand Creation</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">The complete visual base — logo, ad creatives, banners, and mood boards that lock your look before anything else is built.
+        <div class="svc-body"><div class="svc-body-inner">Logo, ad creatives, banners and mood boards. We lock the look first, so every asset after it stays consistent.
           <div class="tags"><span>Logo</span><span>Ad designs</span><span>Banners</span><span>Mood boards</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="02" data-vtitle="Social Media Management" data-vcopy="Instagram, YouTube, and LinkedIn — managed end to end with a rhythm built for growth.">
+      <div class="svc-item" data-vnum="02" data-vimg="images/services/02-social-media.webp" data-vtitle="Social Media Management" data-vcopy="Instagram, YouTube and LinkedIn, run end to end.">
         <button class="svc-tab"><span class="svc-num">02</span><span class="svc-name">Social Media Management</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">Full-channel management across Instagram, YouTube, and LinkedIn — strategy, content, and a posting rhythm that compounds.
+        <div class="svc-body"><div class="svc-body-inner">Calendar, content, captions and posting across Instagram, YouTube and LinkedIn. We keep the rhythm so you do not have to chase it.
           <div class="tags"><span>Instagram</span><span>YouTube</span><span>LinkedIn</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="03" data-vtitle="Performance Marketing" data-vcopy="Paid campaigns built to find the right people and turn spend into measurable growth.">
+      <div class="svc-item" data-vnum="03" data-vimg="images/services/03-performance.webp" data-vtitle="Performance Marketing" data-vcopy="Paid campaigns aimed at the right people, measured properly.">
         <button class="svc-tab"><span class="svc-num">03</span><span class="svc-name">Performance Marketing</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">Paid campaigns engineered for results — targeting, creative, and optimisation that turn budget into pipeline.
+        <div class="svc-body"><div class="svc-body-inner">Audience targeting, ad creative and weekly optimisation on Meta and Google. You get a report that shows what each rupee did.
           <div class="tags"><span>Meta ads</span><span>Targeting</span><span>Optimisation</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="04" data-vtitle="App Design" data-vcopy="Product and app interfaces designed to feel clean, intuitive, and on-brand.">
+      <div class="svc-item" data-vnum="04" data-vimg="images/services/04-app-design.webp" data-vtitle="App Design" data-vcopy="App and product screens that stay clean and on brand.">
         <button class="svc-tab"><span class="svc-num">04</span><span class="svc-name">App Design</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">Interfaces and product design that are clean, intuitive, and unmistakably yours — from first wireframe to polished screens.
+        <div class="svc-body"><div class="svc-body-inner">Wireframes through to final screens, handed over with a component set your developers can build straight from.
           <div class="tags"><span>UI / UX</span><span>Wireframes</span><span>Prototypes</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="05" data-vtitle="Website Making" data-vcopy="Fast, expressive websites that explain your value and move people to act.">
+      <div class="svc-item" data-vnum="05" data-vimg="images/services/05-website.webp" data-vtitle="Website Making" data-vcopy="Fast websites that explain what you do and get people to act.">
         <button class="svc-tab"><span class="svc-num">05</span><span class="svc-name">Website Making</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">Custom-feeling websites built for clarity and speed — landing pages, company sites, and funnels that convert.
+        <div class="svc-body"><div class="svc-body-inner">Landing pages, company sites and funnels. Built light so they load properly on Indian mobile networks.
           <div class="tags"><span>Landing pages</span><span>Company sites</span><span>Funnels</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="06" data-vtitle="Videography & Editing" data-vcopy="Shooting and editing in-house — reels, brand films, and content that actually moves.">
+      <div class="svc-item" data-vnum="06" data-vimg="images/services/06-videography.webp" data-vtitle="Videography & Editing" data-vcopy="Shot and cut in house. Reels, brand films and short form.">
         <button class="svc-tab"><span class="svc-num">06</span><span class="svc-name">Videography & Editing</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">Shot and cut in-house — reels, brand films, and short-form content built to stop the scroll.
+        <div class="svc-body"><div class="svc-body-inner">We shoot it, we cut it, you post it. Reels, brand films and product cuts, all done in house.
           <div class="tags"><span>Reels</span><span>Brand films</span><span>Editing</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="07" data-vtitle="Event Coverage" data-vcopy="On-ground capture that turns a single event into weeks of content.">
+      <div class="svc-item" data-vnum="07" data-vimg="images/services/07-event-coverage.webp" data-vtitle="Event Coverage" data-vcopy="On ground coverage that turns one day into weeks of content.">
         <button class="svc-tab"><span class="svc-num">07</span><span class="svc-name">Event Coverage</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">On-ground photo and video coverage that turns one event into a library of content you can post for weeks.
+        <div class="svc-body"><div class="svc-body-inner">Photo and video on the day, then a full set of cuts and stills you can post for the next few weeks.
           <div class="tags"><span>Photo</span><span>Video</span><span>Recaps</span></div></div></div>
       </div>
-      <div class="svc-item" data-vnum="08" data-vtitle="UGC Content" data-vcopy="Authentic creator-style content that feels native and earns trust.">
+      <div class="svc-item" data-vnum="08" data-vimg="images/services/08-ugc.webp" data-vtitle="UGC Content" data-vcopy="Creator style content that looks native to the feed.">
         <button class="svc-tab"><span class="svc-num">08</span><span class="svc-name">UGC Content</span><span class="svc-plus">+</span></button>
-        <div class="svc-body"><div class="svc-body-inner">Creator-style content that feels native to the feed — authentic, relatable, and built to earn trust fast.
+        <div class="svc-body"><div class="svc-body-inner">Scripted and shot to look like a real person talking, not an ad. Works well on cold traffic.
           <div class="tags"><span>Creator-style</span><span>Native feel</span><span>Conversion</span></div></div></div>
       </div>
     </div>
     <aside class="svc-visual reveal">
+      <div class="svc-img-stack" aria-hidden="true">
+        <img class="svc-img is-on" id="svcImgA" src="images/services/01-brand-creation.webp" alt="">
+        <img class="svc-img" id="svcImgB" src="" alt="">
+      </div>
+      <div class="svc-scrim" aria-hidden="true"></div>
       <div class="vnum" id="vnum">01</div>
-      <div><h3 id="vtitle">Brand Creation</h3><p id="vcopy">Logos, ad designs, banners, and mood boards — a full visual identity that feels intentionally yours.</p></div>
+      <div class="svc-visual-copy"><h3 id="vtitle">Brand Creation</h3><p id="vcopy">Logo, ad designs, banners and mood boards. The full visual base for a new brand.</p></div>
     </aside>
   </div>
 </div></section>
@@ -1019,8 +1146,8 @@ button:disabled{
     </div>
 
     <p>
-      Websites that convert. Socials that get noticed.
-      Scroll through the work. Each project takes over as you reach it.
+      Pick a project from the list. The panel on the right is the real thing,
+      not a screenshot. Click it to open it in a new tab.
     </p>
   </div>
 
@@ -1028,7 +1155,8 @@ button:disabled{
 <div class="wrap work-showcase">
   <div class="project-list">
 
-<div
+<button
+  type="button"
   class="project active"
   data-type="website"
   data-number="01"
@@ -1041,9 +1169,10 @@ button:disabled{
     <strong>Vyntra Media</strong>
     <small>Website</small>
   </span>
-</div>
+</button>
 
-<div
+<button
+  type="button"
   class="project"
   data-type="website"
   data-number="02"
@@ -1056,87 +1185,92 @@ button:disabled{
     <strong>Seeds Consulting</strong>
     <small>Website</small>
   </span>
-</div>
+</button>
 
-<div
+<button
+  type="button"
   class="project"
   data-type="phone"
   data-number="03"
-  data-title="Senpai"
-  data-category="Instagram Content"
-  data-video="videos/senpai_vids.webm"
-  data-link="https://instagram.com/senpai"
->
-  <span class="project-number">03</span>
-  <span class="project-copy">
-    <strong>Senpai</strong>
-    <small>Brand &amp; Social</small>
-  </span>
-</div>
-
-<div
-  class="project"
-  data-type="phone"
-  data-number="04"
   data-title="FWD Home Interiors"
   data-category="Instagram Content"
   data-video="videos/FWD_vids.webm"
   data-link="https://instagram.com/fwdhomeinteriors"
 >
-  <span class="project-number">04</span>
+  <span class="project-number">03</span>
   <span class="project-copy">
     <strong>FWD Interiors</strong>
     <small>Brand &amp; Social</small>
   </span>
-</div>
+</button>
 
-<div
+<button
+  type="button"
   class="project"
   data-type="phone"
-  data-number="05"
+  data-number="04"
   data-title="urbnr.blr"
   data-category="Instagram Content"
   data-video="videos/urbnr_vids.webm"
   data-link="https://instagram.com/urbnr.blr"
 >
-  <span class="project-number">05</span>
+  <span class="project-number">04</span>
   <span class="project-copy">
     <strong>urbnr.blr</strong>
     <small>Brand &amp; Social</small>
   </span>
-</div>
+</button>
 
-<div
+<button
+  type="button"
   class="project"
   data-type="phone"
-  data-number="06"
+  data-number="05"
   data-title="Loop Talent"
   data-category="Instagram Content"
   data-video="videos/loop_vids.webm"
   data-link="https://instagram.com/looptalent"
 >
-  <span class="project-number">06</span>
+  <span class="project-number">05</span>
   <span class="project-copy">
     <strong>Loop Talent</strong>
     <small>Brand &amp; Social</small>
   </span>
-</div>
+</button>
 
-<div
+<button
+  type="button"
   class="project"
   data-type="phone"
-  data-number="07"
+  data-number="06"
   data-title="Gleo.ai"
   data-category="Mobile App"
   data-video="videos/gleoai.webm"
   data-link="https://yourapp.com"
 >
-  <span class="project-number">07</span>
+  <span class="project-number">06</span>
   <span class="project-copy">
     <strong>Gleo.ai</strong>
     <small>Mobile App</small>
   </span>
-</div>
+</button>
+
+<button
+  type="button"
+  class="project"
+  data-type="phone"
+  data-number="07"
+  data-title="Senpai"
+  data-category="Instagram Content"
+  data-video="videos/senpai_vids.webm"
+  data-link="https://instagram.com/senpai"
+>
+  <span class="project-number">07</span>
+  <span class="project-copy">
+    <strong>Senpai</strong>
+    <small>Brand &amp; Social</small>
+  </span>
+</button>
 
   </div>
 
@@ -1179,12 +1313,15 @@ button:disabled{
 
         <div class="phone-view" id="phoneView">
           <div class="showcase-phone">
-            <video id="projectVideo" autoplay muted loop playsinline>
-              <source src="">
-            </video>
+            <video id="projectVideo" autoplay muted loop playsinline preload="auto"></video>
           </div>
         </div>
       </a>
+
+      <p class="preview-hint" id="previewHint">
+        <span class="hint-dot" aria-hidden="true"></span>
+        Live preview. Click it to open the site in a new tab.
+      </p>
 
       <div class="preview-meta">
         <div>
@@ -1200,12 +1337,12 @@ button:disabled{
 
 <!-- FAQ -->
 <section class="section" id="faq" style="background:var(--paper-2)"><div class="wrap faq">
-  <div class="faq-aside reveal"><span class="eyebrow">Good to know</span><h2>Small questions, real answers.</h2></div>
+  <div class="faq-aside reveal"><span class="eyebrow">Good to know</span><h2>The usual questions.</h2></div>
   <div class="faq-list reveal">
-    <div class="faq-q"><button>What do you actually do?<span class="qmark">+</span></button><div class="faq-a"><p>Brand identity, websites, content and social, plus the automation that ties it together. If it needs a creative system, that's us.</p></div></div>
-    <div class="faq-q"><button>How long does a project take?<span class="qmark">+</span></button><div class="faq-a"><p>Depends on scope. A landing page can be a week or two; a full brand-and-site build runs a few weeks. You get a clear timeline upfront.</p></div></div>
-    <div class="faq-q"><button>Can you work with my existing brand?<span class="qmark">+</span></button><div class="faq-a"><p>Yes — we can refresh and extend what's working instead of starting from zero.</p></div></div>
-    <div class="faq-q"><button>Do you offer revisions?<span class="qmark">+</span></button><div class="faq-a"><p>Every project includes revision rounds so the final work feels right, not just done.</p></div></div>
+    <div class="faq-q"><button>What do you actually do?<span class="qmark">+</span></button><div class="faq-a"><p>Brand identity, websites, social content, video and paid ads. You can take one piece or the whole set.</p></div></div>
+    <div class="faq-q"><button>How long does a project take?<span class="qmark">+</span></button><div class="faq-a"><p>A landing page is usually one to two weeks. A full brand and site build runs four to six. You get the dates before we start.</p></div></div>
+    <div class="faq-q"><button>Can you work with my existing brand?<span class="qmark">+</span></button><div class="faq-a"><p>Yes. We can extend what is already working instead of throwing it out and starting again.</p></div></div>
+    <div class="faq-q"><button>Do you offer revisions?<span class="qmark">+</span></button><div class="faq-a"><p>Two rounds on every deliverable are built into the quote. Anything past that we price separately, and we tell you before it happens.</p></div></div>
   </div>
 </div></section>
 
@@ -1225,9 +1362,8 @@ button:disabled{
         </h2>
 
         <p>
-          Whether you're starting from scratch or relaunching,
-          this is a strong place to begin.
-          We'll turn it into something people recognize.
+          Starting from zero or relaunching, both work. Send us what you
+          have and we will come back with what it needs and what it costs.
         </p>
 
         <img class="fox" src="images/fox-mark.png" alt="Funky Fox">
@@ -1300,7 +1436,7 @@ button:disabled{
 
             <textarea
               name="Message"
-              placeholder="Tell us a little about your project..."
+              placeholder="What are you building, and by when?"
               required
             ></textarea>
 
@@ -1328,7 +1464,7 @@ button:disabled{
   <div class="ft-top">
     <div class="ft-big">FUNKY <span>FOX</span></div>
     <div class="ft-links">
-      <a href="#services">Services</a><a href="#work">Work</a><a href="#process">Process</a><a href="#contact">Contact</a>
+      <a href="#services">Services</a><a href="#work">Work</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
     </div>
   </div>
   <div class="ft-bot">
@@ -1346,14 +1482,35 @@ button:disabled{
     addEventListener('pointermove',e=>{root.style.setProperty('--cx',e.clientX+'px');root.style.setProperty('--cy',e.clientY+'px');});
   }
 
-  // SERVICES — open on scroll (each activates as it centers in view)
+  // SERVICES: opens on scroll, click also works
   const items=[...document.querySelectorAll('.svc-item')];
   const vnum=document.getElementById('vnum'),vtitle=document.getElementById('vtitle'),vcopy=document.getElementById('vcopy');
+
+  // preload every service image once, so swaps never show a blank card
+  items.forEach(it=>{ if(it.dataset.vimg){ const i=new Image(); i.src=it.dataset.vimg; } });
+
+  // two <img> layers, ping-ponged so each swap crossfades
+  let imgOn=document.getElementById('svcImgA'), imgOff=document.getElementById('svcImgB');
+  function setVisual(src){
+    if(!src || !imgOn || !imgOff) return;
+    if(imgOn.getAttribute('src')===src) return;
+    const show=()=>{
+      imgOff.classList.add('is-on');
+      imgOn.classList.remove('is-on');
+      const t=imgOn; imgOn=imgOff; imgOff=t;
+    };
+    if(imgOff.getAttribute('src')===src){ show(); return; }
+    imgOff.onload=()=>{ imgOff.onload=null; show(); };
+    imgOff.onerror=()=>{ imgOff.onerror=null; };
+    imgOff.src=src;
+  }
+
   function openItem(it){
     items.forEach(i=>{i.classList.remove('open');i.querySelector('.svc-body').style.maxHeight=null;});
     it.classList.add('open');
     it.querySelector('.svc-body').style.maxHeight=it.querySelector('.svc-body-inner').scrollHeight+'px';
     vnum.textContent=it.dataset.vnum;vtitle.textContent=it.dataset.vtitle;vcopy.textContent=it.dataset.vcopy;
+    setVisual(it.dataset.vimg);
   }
   openItem(items[0]);
   // activate the item nearest the viewport center on scroll
@@ -1373,11 +1530,16 @@ button:disabled{
     });
   });
 
-  // contact (no backend yet)
-  document.getElementById('sendBtn').addEventListener('click',()=>{
-    const n=document.getElementById('cn').value.trim();
-    document.getElementById('sendBtn').textContent = n? `Thanks ${n.split(' ')[0]} — we'll be in touch ✓` : 'Add your details first →';
-  });
+  // CONTACT: Formspree handles the POST, this is just button feedback
+  (function(){
+    const form=document.getElementById('contactForm'),btn=document.getElementById('sendBtn');
+    if(!form||!btn)return;
+    form.addEventListener('submit',()=>{
+      const n=(form.querySelector('[name="Name"]')?.value||'').trim().split(' ')[0];
+      btn.disabled=true;
+      btn.textContent = n ? `Thanks ${n}, sending...` : 'Sending...';
+    });
+  })();
 
   // FOX PAW cursor + footprints
   const fine = matchMedia('(hover:hover) and (pointer:fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1418,7 +1580,7 @@ button:disabled{
   document.querySelectorAll('.stat b').forEach(b=>co.observe(b));
 </script>
 <script>
-  // WORK — preview changes as each project reaches viewport centre
+  // WORK: click a project name to swap the preview
 (function () {
   const projects = [...document.querySelectorAll(".project")];
   if (!projects.length) return;
@@ -1441,7 +1603,6 @@ button:disabled{
   let activeProject = projects.find((p) => p.classList.contains("active")) || projects[0];
   let pendingProject = null;
   let activationFrame = null;
-  let scrollFrame = null;
 
   workScroll?.style.setProperty("--project-count", projects.length);
 
@@ -1460,40 +1621,57 @@ button:disabled{
     }
   }
 
-  function waitForWebsite(url, done) {
+  function loadWebsite(url) {
     previewLink.href = url;
+    laptopView.classList.remove("media-error");
+
     try {
-      if (new URL(projectIframe.src).href === new URL(url, location.href).href) {
-        done();
-        return;
-      }
+      if (new URL(projectIframe.src).href === new URL(url, location.href).href) return;
     } catch (_) {}
 
-    const onLoad = () => {
-      projectIframe.removeEventListener("load", onLoad);
-      done();
+    // If the frame never loads (offline, file://, X-Frame-Options), flag it
+    // rather than leaving a blank white rectangle on screen.
+    clearTimeout(projectIframe._timer);
+    const settle = () => {
+      clearTimeout(projectIframe._timer);
+      projectIframe.removeEventListener("load", settle);
     };
-    projectIframe.addEventListener("load", onLoad);
+    projectIframe.addEventListener("load", settle);
+    projectIframe._timer = setTimeout(() => {
+      laptopView.classList.add("media-error");
+    }, 6000);
+
     projectIframe.src = url;
   }
 
-  function waitForPhone(link, videoSrc, done) {
+  function loadPhone(link, videoSrc) {
     previewLink.href = link;
+    phoneView.classList.remove("media-error");
 
     if (projectVideo.dataset.currentSrc === videoSrc) {
       projectVideo.play().catch(() => {});
-      done();
       return;
     }
 
     const onReady = () => {
-      projectVideo.removeEventListener("loadeddata", onReady);
+      cleanup();
       projectVideo.dataset.currentSrc = videoSrc;
       projectVideo.play().catch(() => {});
-      done();
     };
+    const onFail = () => {
+      cleanup();
+      projectVideo.dataset.currentSrc = "";
+      phoneView.classList.add("media-error");
+      console.warn("[work] video failed to load:", videoSrc);
+    };
+    function cleanup() {
+      projectVideo.removeEventListener("loadeddata", onReady);
+      projectVideo.removeEventListener("error", onFail);
+    }
 
+    cleanup();
     projectVideo.addEventListener("loadeddata", onReady);
+    projectVideo.addEventListener("error", onFail);
     projectVideo.src = videoSrc;
     projectVideo.load();
   }
@@ -1535,14 +1713,17 @@ button:disabled{
     previewNumber.textContent = number;
     previewTitle.textContent = title;
     previewCategory.textContent = category;
+    setHint(type);
 
-    const applyViews = () => {
-      if (reducedMotion) swapPreviewViews(type);
-      else crossfadePreviewViews(type);
-    };
+    // Swap the panel first so the correct device is always on screen,
+    // even if the site or video behind it fails to load.
+    if (reducedMotion) swapPreviewViews(type);
+    else crossfadePreviewViews(type);
 
-    if (type === "website") waitForWebsite(url, applyViews);
-    else waitForPhone(link, video, applyViews);
+    syncPreviewSizing();
+
+    if (type === "website") loadWebsite(url);
+    else loadPhone(link, video);
   }
 
   function queueActivate(project) {
@@ -1557,32 +1738,24 @@ button:disabled{
     });
   }
 
-  function syncProjectToScroll() {
-    scrollFrame = null;
-    if (!workScroll || !desktopMQ.matches) return;
+  const previewHint = document.getElementById("previewHint");
 
-    const rect = workScroll.getBoundingClientRect();
-    const stickyTop = 96;
-    const scrollable = Math.max(rect.height - window.innerHeight, 1);
-    const progress = Math.min(Math.max((stickyTop - rect.top) / scrollable, 0), 1);
-    const index = Math.min(projects.length - 1, Math.round(progress * (projects.length - 1)));
-
-    queueActivate(projects[index]);
+  function setHint(type) {
+    if (!previewHint) return;
+    previewHint.lastChild.textContent =
+      type === "website"
+        ? " Live preview. Click it to open the site in a new tab."
+        : " Click the preview to open the account in a new tab.";
   }
 
-  function scheduleScrollSync() {
-    if (scrollFrame) return;
-    scrollFrame = requestAnimationFrame(syncProjectToScroll);
-  }
+  projects.forEach((project) => {
+    project.addEventListener("click", () => queueActivate(project));
+  });
 
+  setHint(activeProject.dataset.type);
   syncPreviewSizing();
-  addEventListener("scroll", scheduleScrollSync, { passive: true });
-  addEventListener("resize", () => {
-    syncPreviewSizing();
-    scheduleScrollSync();
-  }, { passive: true });
-  desktopMQ.addEventListener("change", scheduleScrollSync);
-  syncProjectToScroll();
+  addEventListener("resize", syncPreviewSizing, { passive: true });
+  desktopMQ.addEventListener("change", syncPreviewSizing);
 })();
 </script>
 </body>
